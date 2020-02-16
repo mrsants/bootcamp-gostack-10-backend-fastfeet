@@ -15,6 +15,6 @@ routes.put('/user', UserController.update);
 
 routes.get('/recipient', RecipientController.index);
 
-routes.get('/recipient', RecipientController.store);
+routes.post('/recipient', RecipientController.store);
 
 export default routes;

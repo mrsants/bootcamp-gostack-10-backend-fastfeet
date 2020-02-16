@@ -4,7 +4,7 @@
 
 import * as Yup from 'yup';
 import Recipient from '../models/Recipient';
-import User from '../models/User';
+
 
 /** RecipientController é responsável pelo controle dos destinários. */
 class RecipientController {
@@ -16,7 +16,7 @@ class RecipientController {
    * @description Método responsável por retorna uma lista de destinários
    */
   async index(_, res) {
-    const listRecipient = await User.findAll();
+    const listRecipient = await Recipient.findAll();
     return res.status(200).json(listRecipient);
   }
 
@@ -29,6 +29,7 @@ class RecipientController {
   async store(req, res) {
     const schema = Yup.object().shape({
       street: Yup.string().required(),
+      district: Yup.string().required(),
       number: Yup.string().required(),
       complement: Yup.string(),
       state: Yup.string().required(),
@@ -39,9 +40,10 @@ class RecipientController {
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({ error: 'Validation fails' });
     }
-
+  
     const {
       street,
+      district,
       number,
       complement,
       state,
@@ -51,6 +53,7 @@ class RecipientController {
 
     return res.status(201).json({
       street,
+      district,
       number,
       complement,
       state,
