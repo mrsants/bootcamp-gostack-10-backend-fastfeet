@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import UserController from './controllers/UserController';
-import AuthenticationMiddleware from './middlewares/auth';
-import SessionController from './controllers/SessionController';
+import DeliveryController from './controllers/DeliveryController';
 import RecipientController from './controllers/RecipientController';
+import SessionController from './controllers/SessionController';
+import UserController from './controllers/UserController';
+
+import AuthenticationMiddleware from './middlewares/auth';
 
 const routes = Router();
 
@@ -13,14 +15,24 @@ routes.use(AuthenticationMiddleware);
 
 routes.put('/user', UserController.update);
 
-routes.get('/recipients', RecipientController.index);
+routes.get('/recipient', RecipientController.index);
 
-routes.get('/recipients/:recipientId', RecipientController.show);
+routes.get('/recipient/:recipientId', RecipientController.show);
 
-routes.post('/recipients', RecipientController.store);
+routes.post('/recipient', RecipientController.store);
 
-routes.put('/recipients/:recipientId', RecipientController.update);
+routes.put('/recipient/:recipientId', RecipientController.update);
 
-routes.delete('/recipients/:recipientId', RecipientController.delete);
+routes.delete('/recipient/:recipientId', RecipientController.delete);
+
+routes.get('/delivery', DeliveryController.index);
+
+routes.get('/delivery/:deliveryId', DeliveryController.show);
+
+routes.post('/delivery', DeliveryController.store);
+
+routes.put('/delivery/:deliveryId', DeliveryController.update);
+
+routes.delete('/delivery/:deliveryId', DeliveryController.delete);
 
 export default routes;
