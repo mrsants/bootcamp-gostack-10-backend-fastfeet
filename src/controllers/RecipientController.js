@@ -4,7 +4,7 @@
 
 import * as Yup from 'yup';
 import Recipient from '../models/Recipient';
-
+import { isNullOrUndefined } from 'util';
 
 /** RecipientController é responsável pelo controle dos destinários. */
 class RecipientController {
@@ -12,7 +12,7 @@ class RecipientController {
    * @method index
    * @param {*} req
    * @param {*} res
-   * @returns {Array} listRecipient  
+   * @returns {Array} listRecipient
    * @description Método responsável por retorna uma lista de destinários
    */
   async index(_, res) {
@@ -21,10 +21,38 @@ class RecipientController {
   }
 
   /**
+   * @method show
+   * @param {*} req
+   * @param {*} res
+   * @returns {Object} listRecipient
+   * @description Método responsável por retorna uma lista de destinários por id.
+   */
+  async show(req, res) {
+    const { recipientId } = req.params;
+
+    const recipient = await Recipient.findByPk(recipientId);
+
+    if (isNullOrUndefined(recipient)) {
+      return res.status(401).json({
+        error: {
+          message: 'Recipient not exists!',
+          statusCode: 401,
+        },
+      });
+    }
+
+    return res.status(201).json({
+      recipient,
+    });
+  }
+
+  /**
    * Método responsável por criar um destinário.
    * @method index
    * @param {*} req
    * @param {*} res
+   * @returns {Object} listRecipient
+   * @description Método responsável por criar um destinário.
    */
   async store(req, res) {
     const schema = Yup.object().shape({
@@ -36,11 +64,16 @@ class RecipientController {
       city: Yup.string().required(),
       zip_code: Yup.string().required(),
     });
-    
+
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: 'Validation fails' });
+      return res.status(401).json({
+        error: {
+          message: 'Validation fails',
+          statusCode: 401,
+        },
+      });
     }
-  
+
     const {
       street,
       district,
@@ -59,6 +92,101 @@ class RecipientController {
       state,
       city,
       zip_code,
+    });
+  }
+
+  /**
+   * @method update
+   * @param {*} req
+   * @param {*} res
+   * @returns {Object} listRecipient
+   * @description Método responsável por atualizar um destinário por id.
+   */
+  async update(req, res) {
+    const { recipientId } = req.params;
+
+    const schema = Yup.object().shape({
+      street: Yup.string(),
+      district: Yup.string(),
+      number: Yup.string(),
+      complement: Yup.string(),
+      state: Yup.string(),
+      city: Yup.string(),
+      zip_code: Yup.string(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(401).json({
+        error: {
+          message: 'Validation fails',
+          statusCode: 401,
+        },
+      });
+    }
+
+    const recipient = await Recipient.findByPk(recipientId);
+
+    if (isNullOrUndefined(recipient)) {
+      return res.status(401).json({
+        error: {
+          message: 'Recipient not exists!',
+          statusCode: 401,
+        },
+      });
+    }
+
+    const {
+      id,
+      name,
+      street,
+      number,
+      complement,
+      state,
+      city,
+      cep,
+    } = await recipient.update(req.body);
+
+    return res.status(200).json({
+      id,
+      name,
+      street,
+      number,
+      complement,
+      state,
+      city,
+      cep,
+    });
+  }
+
+  /**
+   * @method delete
+   * @param {*} req
+   * @param {*} res
+   * @returns {Object} listRecipient
+   * @description Método responsável por deletar um destinário por id.
+   */
+  async delete(req, res) {
+    const { recipientId } = req.params;
+
+    const recipient = await Recipient.findByPk(recipientId);
+
+    if (isNullOrUndefined(recipient)) {
+      return res.status(401).json({
+        error: {
+          message: 'Recipient not found',
+          statusCode: 401,
+        },
+      });
+    }
+
+    await Recipient.destroy({
+      where: {
+        id: recipientId,
+      },
+    });
+
+    return res.status(200).json({
+      message: `Recipient successfully deleted`,
     });
   }
 }

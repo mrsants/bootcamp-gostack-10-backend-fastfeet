@@ -13,8 +13,14 @@ routes.use(AuthenticationMiddleware);
 
 routes.put('/user', UserController.update);
 
-routes.get('/recipient', RecipientController.index);
+routes.get('/recipients', RecipientController.index);
 
-routes.post('/recipient', RecipientController.store);
+routes.get('/recipients/:recipientId', RecipientController.show);
+
+routes.post('/recipients', RecipientController.store);
+
+routes.put('/recipients/:recipientId', RecipientController.update);
+
+routes.delete('/recipients/:recipientId', RecipientController.delete);
 
 export default routes;

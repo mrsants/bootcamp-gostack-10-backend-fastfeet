@@ -8,11 +8,11 @@ import * as Yup from 'yup';
 
 /** SessionController é responsável por adminstrar a sessoes do usuário */
 class SessionController {
-   /**
+  /**
    * @method index
    * @param {*} req
    * @param {*} res
-   * @returns {Array} listRecipient  
+   * @returns {Array} listRecipient
    * @description Método responsável por criar um token JWT
    */
   async store(req, res) {
@@ -25,7 +25,12 @@ class SessionController {
     });
 
     if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({ error: 'Validation fails' });
+      return res.status(401).json({
+        error: {
+          message: 'Validation fails',
+          statusCode: 401,
+        },
+      });
     }
 
     const { email, password } = req.body;
@@ -36,13 +41,19 @@ class SessionController {
 
     if (!user) {
       return res.status(401).json({
-        error: 'User not found',
+        error: {
+          message: 'User not found',
+          statusCode: 401,
+        },
       });
     }
 
     if (!(await user.checkPassword(password))) {
       return res.status(401).json({
-        error: 'Password does not match',
+        error: {
+          message: 'Password does not match',
+          statusCode: 401,
+        },
       });
     }
 
