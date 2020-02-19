@@ -8,7 +8,6 @@ import SessionController from './controllers/SessionController';
 import UserController from './controllers/UserController';
 import AuthenticationMiddleware from './middlewares/auth';
 
-
 const routes = Router();
 
 const upload = multer(multerConfig);
@@ -39,8 +38,18 @@ routes.get('/deliverymans/:deliveryId', DeliverymansController.show);
 
 routes.post('/deliverymans', DeliverymansController.store);
 
-// routes.put("/delivery/:deliveryId", DeliverymanController.update);
+routes.put('/deliverymans/:deliveryId', DeliverymanController.update);
 
-// routes.delete("/delivery/:deliveryId", DeliverymanController.delete);
+routes.delete('/deliverymans/:deliveryId', DeliverymanController.delete);
+
+routes.get('/order-management', OrderManagementController.index);
+
+routes.get('/order-management/:orderManagementId', OrderManagementController.show);
+
+routes.post('/order-management', OrderManagementController.store);
+
+routes.put('/order-management/:orderManagementId', OrderManagementController.update);
+
+routes.delete('/order-management/:orderManagementId', OrderManagementController.delete);
 
 export default routes;
