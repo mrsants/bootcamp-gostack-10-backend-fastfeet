@@ -1,14 +1,20 @@
 import { Router } from 'express';
-import DeliveryController from './controllers/DeliveryController';
+import multer from 'multer';
+import multerConfig from '../src/config/multerConfig';
+import PhotosController from './controllers/PhotosController';
+import DeliverymansController from './controllers/DeliverymansController';
 import RecipientController from './controllers/RecipientController';
 import SessionController from './controllers/SessionController';
 import UserController from './controllers/UserController';
-
 import AuthenticationMiddleware from './middlewares/auth';
+
 
 const routes = Router();
 
+const upload = multer(multerConfig);
+
 routes.post('/user', UserController.store);
+
 routes.post('/sessions', SessionController.store);
 
 routes.use(AuthenticationMiddleware);
@@ -25,14 +31,16 @@ routes.put('/recipient/:recipientId', RecipientController.update);
 
 routes.delete('/recipient/:recipientId', RecipientController.delete);
 
-routes.get('/delivery', DeliveryController.index);
+routes.post('/photos', upload.single('photos'), PhotosController.store);
 
-routes.get('/delivery/:deliveryId', DeliveryController.show);
+routes.get('/deliverymans', DeliverymansController.index);
 
-routes.post('/delivery', DeliveryController.store);
+routes.get('/deliverymans/:deliveryId', DeliverymansController.show);
 
-routes.put('/delivery/:deliveryId', DeliveryController.update);
+routes.post('/deliverymans', DeliverymansController.store);
 
-routes.delete('/delivery/:deliveryId', DeliveryController.delete);
+// routes.put("/delivery/:deliveryId", DeliverymanController.update);
+
+// routes.delete("/delivery/:deliveryId", DeliverymanController.delete);
 
 export default routes;
