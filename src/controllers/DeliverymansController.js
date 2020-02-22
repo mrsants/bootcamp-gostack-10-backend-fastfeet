@@ -44,7 +44,19 @@ class DeliverymanController {
   async show(req, res) {
     const { deliveryId } = req.params;
 
-    const delivery = await Deliverymans.findByPk(deliveryId);
+    const delivery = await Deliverymans.findByPk(deliveryId, {
+      limit: 20,
+      offset: (page - 1) * 20,
+      attributes: ['id', 'name', 'email'],
+      include: [
+        {
+          model: Photos,
+          as: 'avatar',
+          attributes: ['name', 'path', 'url'],
+          required: true,
+        },
+      ],
+    });
 
     if (isNullOrUndefined(delivery)) {
       return res.status(401).json({
@@ -111,7 +123,7 @@ class DeliverymanController {
         error: 'Validation fails',
       });
     }
-    
+
     const emailExists = await Deliverymans.findOne({
       where: { email: req.body.email },
     });
@@ -136,8 +148,8 @@ class DeliverymanController {
     });
   }
 
-    /**
-   * @method update
+  /**
+   * @method delete
    * @param {*} req
    * @param {*} res
    * @returns {Object} listDelivery
