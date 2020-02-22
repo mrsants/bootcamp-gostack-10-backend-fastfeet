@@ -7,6 +7,7 @@ import RecipientController from './controllers/RecipientController';
 import SessionController from './controllers/SessionController';
 import UserController from './controllers/UserController';
 import AuthenticationMiddleware from './middlewares/auth';
+import OrderManagementController from './controllers/OrderManagementController';
 
 const routes = Router();
 
@@ -38,18 +39,27 @@ routes.get('/deliverymans/:deliveryId', DeliverymansController.show);
 
 routes.post('/deliverymans', DeliverymansController.store);
 
-routes.put('/deliverymans/:deliveryId', DeliverymanController.update);
+routes.put('/deliverymans/:deliveryId', DeliverymansController.update);
 
-routes.delete('/deliverymans/:deliveryId', DeliverymanController.delete);
+routes.delete('/deliverymans/:deliveryId', DeliverymansController.delete);
 
 routes.get('/order-management', OrderManagementController.index);
 
-routes.get('/order-management/:orderManagementId', OrderManagementController.show);
+routes.get(
+  '/order-management/:orderManagementId',
+  OrderManagementController.show
+);
 
 routes.post('/order-management', OrderManagementController.store);
 
-routes.put('/order-management/:orderManagementId', OrderManagementController.update);
+routes.put(
+  '/order-management/:orderManagementId',
+  OrderManagementController.update
+);
 
-routes.delete('/order-management/:orderManagementId', OrderManagementController.delete);
+routes.delete(
+  '/order-management/:orderManagementId',
+  OrderManagementController.delete
+);
 
 export default routes;
