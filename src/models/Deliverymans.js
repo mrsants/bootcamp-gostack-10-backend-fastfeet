@@ -6,7 +6,6 @@ class Deliverymans extends Model {
       {
         name: Sequelize.STRING,
         email: Sequelize.STRING,
-        
       },
       {
         sequelize,
@@ -22,4 +21,3 @@ class Deliverymans extends Model {
 }
 
 export default Deliverymans;
-

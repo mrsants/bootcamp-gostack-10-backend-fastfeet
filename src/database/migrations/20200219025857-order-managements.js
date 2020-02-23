@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('order_management', {
+    return queryInterface.createTable('order_managements', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -11,32 +11,32 @@ module.exports = {
       },
       product: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       canceled_at: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       start_date: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       end_date: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       created_at: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('order_management');
+    return queryInterface.dropTable('order_managements');
   },
 };

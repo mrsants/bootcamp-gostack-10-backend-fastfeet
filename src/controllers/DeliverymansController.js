@@ -45,8 +45,6 @@ class DeliverymanController {
     const { deliveryId } = req.params;
 
     const delivery = await Deliverymans.findByPk(deliveryId, {
-      limit: 20,
-      offset: (page - 1) * 20,
       attributes: ['id', 'name', 'email'],
       include: [
         {

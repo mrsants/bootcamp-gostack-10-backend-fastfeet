@@ -20,17 +20,17 @@ class OrderManagement extends Model {
   static associate(models) {
     this.belongsTo(models.Photos, {
       foreignKey: 'signature_id',
-      as: 'signature',
+      as: 'signatures',
     });
 
     this.belongsTo(models.Recipient, {
       foreignKey: 'recipient_id',
-      as: 'recipient',
+      as: 'recipients',
     });
 
     this.belongsTo(models.Deliverymans, {
       foreignKey: 'deliveryman_id',
-      as: 'deliveryman',
+      as: 'deliverymans',
     });
   }
 }
