@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/mrsants/bootcamp-gostack-10-backend-fastfeet#readme",
   "dependencies": {
-    "@sentry/node": "^5.12.3",
+    "@sentry/node": "5.12.2",
     "bcrypt": "^3.0.8",
     "bee-queue": "^1.2.3",
     "crypto": "^1.0.1",
