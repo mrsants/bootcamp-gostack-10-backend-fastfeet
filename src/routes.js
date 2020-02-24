@@ -8,6 +8,17 @@ import SessionController from './controllers/SessionController';
 import UserController from './controllers/UserController';
 import AuthenticationMiddleware from './middlewares/auth';
 import OrderManagementController from './controllers/OrderManagementController';
+import OrderDeliveryController from './controllers/OrderDeliveryController';
+
+routes.put(
+  '/order-delivery/:orderDeliveryId/deliverymans/:deliveryId',
+  OrderDeliveryController.update
+);
+
+routes.get(
+  '/order-delivery/:orderDeliveryId/deliverymans',
+  OrderDeliveryController.index
+);
 
 const routes = Router();
 

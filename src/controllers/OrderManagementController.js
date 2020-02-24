@@ -1,9 +1,9 @@
+import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
-import OrderManagement from '../models/OrderManagement';
-import Recipient from '../models/Recipient';
-import { isNullOrUndefined, isNull } from 'util';
 import Deliverymans from '../models/Deliverymans';
+import OrderManagement from '../models/OrderManagement';
 import Photos from '../models/Photos';
+import Recipient from '../models/Recipient';
 
 class OrderManagementController {
   /**
