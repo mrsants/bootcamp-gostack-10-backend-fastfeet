@@ -9,6 +9,18 @@ import UserController from './controllers/UserController';
 import AuthenticationMiddleware from './middlewares/auth';
 import OrderManagementController from './controllers/OrderManagementController';
 import OrderDeliveryController from './controllers/OrderDeliveryController';
+import ScheduleController from './controllers/ScheduleController';
+
+const routes = Router();
+
+const upload = multer(multerConfig);
+
+routes.get('/deliverymans/:deliverymanId/deliveries', ScheduleController.index);
+
+routes.put(
+  '/deliverymans/:deliverymanId/deliveries/:orderDeliverId',
+  ScheduleController.update
+);
 
 routes.put(
   '/order-delivery/:orderDeliveryId/deliverymans/:deliveryId',
@@ -19,10 +31,6 @@ routes.get(
   '/order-delivery/:orderDeliveryId/deliverymans',
   OrderDeliveryController.index
 );
-
-const routes = Router();
-
-const upload = multer(multerConfig);
 
 routes.post('/user', UserController.store);
 

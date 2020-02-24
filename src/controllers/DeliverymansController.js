@@ -3,7 +3,7 @@
  */
 
 import * as Yup from 'yup';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isNull } from 'util';
 import Deliverymans from '../models/Deliverymans';
 import Photos from '../models/Photos';
 
@@ -134,11 +134,12 @@ class DeliverymanController {
 
     const deliveryman = await Deliverymans.findByPk(deliverymanId);
 
-    if (!deliveryman) {
+    if(isNullOrUndefined(deliveryman)){
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
     const { name, email, avatar_id } = await deliveryman.update(req.body);
+    
     return res.json({
       name,
       email,
