@@ -37,7 +37,7 @@ routes.post('/user', UserController.store);
 
 routes.post('/sessions', SessionController.store);
 
-// routes.post('/deliveries/:deliveryId/problems', OrderProblemsController.store);
+routes.post('/deliveries/:orderManagementId/problems', ProblemsDeliveryController.store);
 
 routes.use(AuthenticationMiddleware);
 
@@ -84,8 +84,8 @@ routes.delete(
 
 routes.get('/problems', ProblemsDeliveryController.index);
 
-// routes.get('/problems/:deliveryId', OrderDeliveryController.show);
+routes.get('/problems/:orderManagementId', ProblemsDeliveryController.show);
 
-// routes.delete('/problems/:problemId', OrderDeliveryController.delete);
+routes.delete('/problems/:problemId', ProblemsDeliveryController.delete);
 
 export default routes;

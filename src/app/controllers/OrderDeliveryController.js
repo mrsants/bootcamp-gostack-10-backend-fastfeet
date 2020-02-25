@@ -22,7 +22,7 @@ class OrderDeliveryController {
     const deliverymans = await Deliverymans.findByPk(orderDeliveryId);
 
     if (isNullOrUndefined(deliverymans)) {
-      res.status(400).json({ error: 'Deliveryman not found' });
+      return res.status(400).json({ error: 'Deliveryman not found' });
     }
 
     const deliveried = await OrderManagements.findAll({
@@ -133,10 +133,12 @@ class OrderDeliveryController {
       locale: pt,
     });
 
-    const { id, product, start_date, end_date } = await OrderManagements.update({
-      end_date: formattedDate,
-      signature_id,
-    });
+    const { id, product, start_date, end_date } = await OrderManagements.update(
+      {
+        end_date: formattedDate,
+        signature_id,
+      }
+    );
 
     return res.status(200).json({
       id,

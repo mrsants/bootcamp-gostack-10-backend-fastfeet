@@ -5,7 +5,7 @@ import Photos from '../app/models/Photos';
 import Recipient from '../app/models/Recipient';
 import User from '../app/models/User';
 import OrderManagements from '../app/models/OrderManagements';
-import ProblemDeliverys from '../app/models/ProblemDeliverys';
+import ProblemsDeliverys from '../app/models/ProblemsDeliverys';
 
 const models = [
   User,
@@ -13,7 +13,7 @@ const models = [
   Photos,
   Deliverymans,
   OrderManagements,
-  ProblemDeliverys,
+  ProblemsDeliverys,
 ];
 
 class Database {
