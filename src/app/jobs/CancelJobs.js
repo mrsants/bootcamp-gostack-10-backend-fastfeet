@@ -10,11 +10,7 @@ class CancelJobs {
     await Mail.sendMail({
       to: `${updatedDelivery.deliverymans.name} <${updatedDelivery.deliverymans.email}>`,
       subject: 'Entrega cancelada',
-      template: 'cancelDelivery',
-      context: {
-        product: updatedDelivery.product,
-        problem: problem.description,
-      },
+      template: 'cancelDelivery'
     });
   }
 }

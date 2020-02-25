@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
 import Photos from '../models/Photos';
 
+/** DeliverymanController é responsável pelo controle de entregadores. */
 class DeliverymanController {
   /**
    * @method index
@@ -78,7 +79,9 @@ class DeliverymanController {
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
-      email: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
       avatar_id: Yup.number().required(),
     });
 
@@ -134,12 +137,12 @@ class DeliverymanController {
 
     const deliveryman = await Deliverymans.findByPk(deliverymanId);
 
-    if(isNullOrUndefined(deliveryman)){
+    if (isNullOrUndefined(deliveryman)) {
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
     const { name, email, avatar_id } = await deliveryman.update(req.body);
-    
+
     return res.json({
       name,
       email,

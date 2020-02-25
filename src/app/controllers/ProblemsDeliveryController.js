@@ -100,6 +100,14 @@ class ProblemsDeliveryController {
     return res.json(deliveryProblem);
   }
 
+  /**
+   * @method delete
+   * @param {*} req
+   * @param {*} res
+   * @returns {Array}  list
+   * @description Método responsável por cancelar as encomendas por entregador.
+   */
+
   async delete(req, res) {
     const { problemId } = req.params;
 

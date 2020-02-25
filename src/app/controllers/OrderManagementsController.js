@@ -4,7 +4,10 @@ import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import Photos from '../models/Photos';
 import Recipients from '../models/Recipients';
+
 import NewJobs from '../jobs/NewJobs';
+import Queue from '../../lib/Queue';
+
 
 class OrderManagementsController {
   /**
@@ -112,17 +115,41 @@ class OrderManagementsController {
       });
     }
 
-    const orderCreated = await OrderManagements.create({
+    const { id } = await OrderManagements.create({
       product,
       recipient_id,
       deliveryman_id,
+    });
+
+    const delivery = await OrderManagements.findByPk(id, {
+      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
+      include: [
+        {
+          model: Recipients,
+          as: 'recipients',
+          attributes: [
+            'street',
+            'district',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'zip_code',
+          ],
+        },
+        {
+          model: Deliverymans,
+          as: 'deliverymans',
+          attributes: ['name', 'email'],
+        },
+      ],
     });
 
     await Queue.add(NewJobs.key, {
       delivery,
     });
 
-    return res.status(201).json(orderCreated);
+    return res.status(201).json(delivery);
   }
 
   /**
