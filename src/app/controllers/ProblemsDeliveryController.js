@@ -1,12 +1,13 @@
 import { format, startOfHour } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import * as Yup from 'yup';
-import Queue from '../../lib/Queue';
-import CancelJobs from '../jobs/CancelJobs';
+import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import ProblemsDeliverys from '../models/ProblemsDeliverys';
-import Recipient from '../models/Recipient';
-import Deliverymans from '../models/Deliverymans';
+import Recipient from '../models/Recipients';
+
+import Queue from '../../lib/Queue';
+import CancelJobs from '../jobs/CancelJobs';
 
 class ProblemsDeliveryController {
   /**

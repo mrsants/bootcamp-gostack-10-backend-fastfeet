@@ -1,15 +1,15 @@
 import Sequelize from 'sequelize';
-import databaseConfig from '../config/database';
 import Deliverymans from '../app/models/Deliverymans';
-import Photos from '../app/models/Photos';
-import Recipient from '../app/models/Recipient';
-import User from '../app/models/User';
 import OrderManagements from '../app/models/OrderManagements';
+import Photos from '../app/models/Photos';
 import ProblemsDeliverys from '../app/models/ProblemsDeliverys';
+import Recipients from '../app/models/Recipients';
+import User from '../app/models/User';
+import databaseConfig from '../config/database';
 
 const models = [
   User,
-  Recipient,
+  Recipients,
   Photos,
   Deliverymans,
   OrderManagements,

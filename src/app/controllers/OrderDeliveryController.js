@@ -6,7 +6,7 @@ import { isNullOrUndefined } from 'util';
 import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import Photos from '../models/Photos';
-import Recipient from '../models/Recipient';
+import Recipients from '../models/Recipients';
 
 class OrderDeliveryController {
   /**
@@ -33,7 +33,7 @@ class OrderDeliveryController {
       attributes: ['id', 'product', 'start_date', 'end_date'],
       include: [
         {
-          model: Recipient,
+          model: Recipients,
           as: 'recipients',
           attributes: [
             'street',

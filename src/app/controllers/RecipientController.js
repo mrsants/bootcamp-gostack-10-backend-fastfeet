@@ -3,7 +3,7 @@
  */
 
 import * as Yup from 'yup';
-import Recipient from '../models/Recipient';
+import Recipients from '../models/Recipients';
 import { isNullOrUndefined } from 'util';
 
 /** RecipientController é responsável pelo controle dos destinários. */
@@ -16,7 +16,7 @@ class RecipientController {
    * @description Método responsável por retorna uma lista de destinários
    */
   async index(_, res) {
-    const listRecipient = await Recipient.findAll();
+    const listRecipient = await Recipients.findAll();
     return res.status(200).json(listRecipient);
   }
 
@@ -30,7 +30,7 @@ class RecipientController {
   async show(req, res) {
     const { recipientId } = req.params;
 
-    const recipient = await Recipient.findByPk(recipientId);
+    const recipient = await Recipients.findByPk(recipientId);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({
@@ -82,7 +82,7 @@ class RecipientController {
       state,
       city,
       zip_code,
-    } = await Recipient.create(req.body);
+    } = await Recipients.create(req.body);
 
     return res.status(201).json({
       street,
@@ -124,7 +124,7 @@ class RecipientController {
       });
     }
 
-    const recipient = await Recipient.findByPk(recipientId);
+    const recipient = await Recipients.findByPk(recipientId);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({
@@ -168,7 +168,7 @@ class RecipientController {
   async delete(req, res) {
     const { recipientId } = req.params;
 
-    const recipient = await Recipient.findByPk(recipientId);
+    const recipient = await Recipients.findByPk(recipientId);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({
@@ -179,7 +179,7 @@ class RecipientController {
       });
     }
 
-    await Recipient.destroy({
+    await Recipients.destroy({
       where: {
         id: recipientId,
       },

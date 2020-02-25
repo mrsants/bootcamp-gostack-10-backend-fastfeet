@@ -4,9 +4,9 @@ import express, { json } from 'express';
 import 'express-async-errors';
 import path from 'path';
 import Youch from 'youch';
-import sentryConfig from '../config/sentryConfig';
-import '../database';
-import routes from '../routes';
+import sentryConfig from './config/sentryConfig';
+import './database';
+import routes from './routes';
 
 class App {
   constructor() {

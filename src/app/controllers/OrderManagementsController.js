@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import Photos from '../models/Photos';
-import Recipient from '../models/Recipient';
+import Recipients from '../models/Recipients';
 import NewJobs from '../jobs/NewJobs';
 
 class OrderManagementsController {
@@ -22,7 +22,7 @@ class OrderManagementsController {
       attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
       include: [
         {
-          model: Recipient,
+          model: Recipients,
           as: 'recipients',
           attributes: [
             'street',
@@ -90,7 +90,7 @@ class OrderManagementsController {
 
     const { product, recipient_id, deliveryman_id } = req.body;
 
-    const recipient = await Recipient.findByPk(recipient_id);
+    const recipient = await Recipients.findByPk(recipient_id);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({

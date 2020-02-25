@@ -23,7 +23,7 @@ class OrderManagements extends Model {
       as: 'signatures',
     });
 
-    this.belongsTo(models.Recipient, {
+    this.belongsTo(models.Recipients, {
       foreignKey: 'recipient_id',
       as: 'recipients',
     });

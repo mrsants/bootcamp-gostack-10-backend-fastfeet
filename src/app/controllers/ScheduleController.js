@@ -4,7 +4,7 @@ import { Op } from 'sequelize';
 import { isNullOrUndefined } from 'util';
 import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
-import Recipient from '../models/Recipient';
+import Recipients from '../models/Recipients';
 
 class ScheduleController {
   /**
@@ -32,7 +32,7 @@ class ScheduleController {
       attributes: ['id', 'product', 'start_date', 'end_date'],
       include: [
         {
-          model: Recipient,
+          model: Recipients,
           as: 'recipients',
           attributes: [
             'street',
