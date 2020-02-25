@@ -3,7 +3,7 @@ import pt from 'date-fns/locale/pt';
 import { Op } from 'sequelize';
 import { isNullOrUndefined } from 'util';
 import Deliverymans from '../models/Deliverymans';
-import OrderManagement from '../models/OrderManagement';
+import OrderManagements from '../models/OrderManagements';
 import Recipient from '../models/Recipient';
 
 class ScheduleController {
@@ -23,7 +23,7 @@ class ScheduleController {
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
-    const deliveries = await OrderManagement.findAll({
+    const deliveries = await OrderManagements.findAll({
       where: {
         deliveryman_id: deliverymanId,
         end_date: null,
@@ -70,13 +70,13 @@ class ScheduleController {
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
-    const orderManagement = await OrderManagement.findByPk(orderDeliverId);
+    const orderManagements = await OrderManagements.findByPk(orderDeliverId);
 
-    if (isNullOrUndefined(orderManagement)) {
+    if (isNullOrUndefined(orderManagements)) {
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
-    if (orderManagement.deliveryman_id !== Number(orderDeliverId)) {
+    if (orderManagements.deliveryman_id !== Number(orderDeliverId)) {
       return res.status(401).json({
         error: {
           message: 'You can only edit deliveries that you own',
@@ -85,7 +85,7 @@ class ScheduleController {
       });
     }
 
-    if (orderManagement.start_date) {
+    if (orderManagements.start_date) {
       return res.status(401).json({
         error: {
           message: 'This delivery was already withdrawn',
@@ -102,7 +102,7 @@ class ScheduleController {
       locale: pt,
     });
 
-    const orderWithdrawal = await OrderManagement.findAndCountAll({
+    const orderWithdrawal = await OrderManagements.findAndCountAll({
       where: {
         start_date: {
           [Op.between]: [startOfDay(now.getTime(), endOfDay(now.getTime))],
@@ -119,7 +119,7 @@ class ScheduleController {
       });
     }
 
-    const { id, product, start_date, end_date } = await orderManagement.update({
+    const { id, product, start_date, end_date } = await orderManagements.update({
       start_date: formattedDate,
     });
 

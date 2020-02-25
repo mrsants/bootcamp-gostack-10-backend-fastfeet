@@ -3,7 +3,7 @@
  */
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
-import authConfig from '../config/authConfig';
+import authConfig from '../../config/authConfig';
 import * as Yup from 'yup';
 
 /** SessionController é responsável por adminstrar a sessoes do usuário */

@@ -1,15 +1,16 @@
 import { Router } from 'express';
 import multer from 'multer';
 import multerConfig from '../src/config/multerConfig';
-import PhotosController from './controllers/PhotosController';
-import DeliverymansController from './controllers/DeliverymansController';
-import RecipientController from './controllers/RecipientController';
-import SessionController from './controllers/SessionController';
-import UserController from './controllers/UserController';
-import AuthenticationMiddleware from './middlewares/auth';
-import OrderManagementController from './controllers/OrderManagementController';
-import OrderDeliveryController from './controllers/OrderDeliveryController';
-import ScheduleController from './controllers/ScheduleController';
+import PhotosController from './app/controllers/PhotosController';
+import DeliverymansController from './app/controllers/DeliverymansController';
+import RecipientController from './app/controllers/RecipientController';
+import SessionController from './app/controllers/SessionController';
+import UserController from './app/controllers/UserController';
+import AuthenticationMiddleware from './app/middlewares/auth';
+import OrderManagementsController from './app/controllers/OrderManagementsController';
+import OrderDeliveryController from './app/controllers/OrderDeliveryController';
+import ScheduleController from './app/controllers/ScheduleController';
+import ProblemsDeliveryController from './app/controllers/ProblemsDeliveryController';
 
 const routes = Router();
 
@@ -35,6 +36,8 @@ routes.get(
 routes.post('/user', UserController.store);
 
 routes.post('/sessions', SessionController.store);
+
+// routes.post('/deliveries/:deliveryId/problems', OrderProblemsController.store);
 
 routes.use(AuthenticationMiddleware);
 
@@ -64,19 +67,25 @@ routes.delete('/deliverymans/:deliveryId', DeliverymansController.delete);
 
 routes.get(
   '/order-management/:orderManagementId',
-  OrderManagementController.show
+  OrderManagementsController.show
 );
 
-routes.post('/order-management', OrderManagementController.store);
+routes.post('/order-management', OrderManagementsController.store);
 
 routes.put(
   '/order-management/:orderManagementId',
-  OrderManagementController.update
+  OrderManagementsController.update
 );
 
 routes.delete(
   '/order-management/:orderManagementId',
-  OrderManagementController.delete
+  OrderManagementsController.delete
 );
+
+routes.get('/problems', ProblemsDeliveryController.index);
+
+// routes.get('/problems/:deliveryId', OrderDeliveryController.show);
+
+// routes.delete('/problems/:problemId', OrderDeliveryController.delete);
 
 export default routes;

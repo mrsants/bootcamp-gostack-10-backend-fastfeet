@@ -1,12 +1,20 @@
 import Sequelize from 'sequelize';
 import databaseConfig from '../config/database';
-import Deliverymans from '../models/Deliverymans';
-import Photos from '../models/Photos';
-import Recipient from '../models/Recipient';
-import User from '../models/User';
-import OrderManagement from '../models/OrderManagement';
+import Deliverymans from '../app/models/Deliverymans';
+import Photos from '../app/models/Photos';
+import Recipient from '../app/models/Recipient';
+import User from '../app/models/User';
+import OrderManagements from '../app/models/OrderManagements';
+import ProblemDeliverys from '../app/models/ProblemDeliverys';
 
-const models = [User, Recipient, Photos, Deliverymans, OrderManagement];
+const models = [
+  User,
+  Recipient,
+  Photos,
+  Deliverymans,
+  OrderManagements,
+  ProblemDeliverys,
+];
 
 class Database {
   constructor() {

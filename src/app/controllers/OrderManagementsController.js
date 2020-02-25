@@ -1,11 +1,12 @@
 import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
-import OrderManagement from '../models/OrderManagement';
+import OrderManagements from '../models/OrderManagements';
 import Photos from '../models/Photos';
 import Recipient from '../models/Recipient';
+import NewJobs from '../jobs/NewJobs';
 
-class OrderManagementController {
+class OrderManagementsController {
   /**
    * @method show
    * @param {*} req
@@ -14,10 +15,10 @@ class OrderManagementController {
    * @description Método responsável por listar as encomendas por entregador.
    */
   async show(req, res) {
-    const { orderManagementId } = req.params;
+    const { OrderManagementsId } = req.params;
 
-    const orderManagement = await OrderManagement.findOne({
-      where: { id: orderManagementId },
+    const OrderManagements = await OrderManagements.findOne({
+      where: { id: OrderManagementsId },
       attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
       include: [
         {
@@ -53,7 +54,7 @@ class OrderManagementController {
       ],
     });
 
-    if (isNullOrUndefined(orderManagement)) {
+    if (isNullOrUndefined(OrderManagements)) {
       return res.status(400).json({
         error: {
           message: 'Order not found',
@@ -61,7 +62,7 @@ class OrderManagementController {
       });
     }
 
-    return res.status(200).json(orderManagement);
+    return res.status(200).json(OrderManagements);
   }
 
   /**
@@ -111,10 +112,14 @@ class OrderManagementController {
       });
     }
 
-    const orderCreated = await OrderManagement.create({
+    const orderCreated = await OrderManagements.create({
       product,
       recipient_id,
       deliveryman_id,
+    });
+
+    await Queue.add(NewJobs.key, {
+      delivery,
     });
 
     return res.status(201).json(orderCreated);
@@ -155,7 +160,7 @@ class OrderManagementController {
       canceled_at,
       start_date,
       end_date,
-    } = OrderManagement.update(req.body);
+    } = OrderManagements.update(req.body);
 
     return res.status(201).json({
       product,
@@ -176,11 +181,13 @@ class OrderManagementController {
    * @description Método responsável por deletar as encomendas.
    */
   async delete() {
-    const { orderManagementId } = req.params;
+    const { OrderManagementsId } = req.params;
 
-    const orderManagement = await OrderManagement.findByPk(orderManagementId);
+    const OrderManagements = await OrderManagements.findByPk(
+      OrderManagementsId
+    );
 
-    if (isNullOrUndefined(orderManagement)) {
+    if (isNullOrUndefined(OrderManagements)) {
       return res.status(400).json({
         error: {
           message: 'Order not exists',
@@ -188,10 +195,10 @@ class OrderManagementController {
       });
     }
 
-    await OrderManagement.destroy({ where: orderManagementId });
+    await OrderManagements.destroy({ where: OrderManagementsId });
 
-    return res.status(200).json(orderManagement);
+    return res.status(200).json(OrderManagements);
   }
 }
 
-export default new OrderManagementController();
+export default new OrderManagementsController();

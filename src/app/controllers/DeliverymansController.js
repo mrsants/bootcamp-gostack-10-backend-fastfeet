@@ -2,8 +2,8 @@
  * @module DeliverymanController
  */
 
+import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
-import { isNullOrUndefined, isNull } from 'util';
 import Deliverymans from '../models/Deliverymans';
 import Photos from '../models/Photos';
 
