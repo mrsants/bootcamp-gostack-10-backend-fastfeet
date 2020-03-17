@@ -1,10 +1,11 @@
+/* eslint-disable class-methods-use-this */
 /**
  * @module SessionController
  */
 import jwt from 'jsonwebtoken';
+import * as Yup from 'yup';
 import User from '../models/User';
 import authConfig from '../../config/authConfig';
-import * as Yup from 'yup';
 
 /** SessionController é responsável por adminstrar a sessoes do usuário */
 class SessionController {
@@ -17,7 +18,6 @@ class SessionController {
    */
   async store(req, res) {
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
       email: Yup.string()
         .email()
         .required(),

@@ -1,3 +1,5 @@
+/* eslint-disable import/order */
+/* eslint-disable import/no-extraneous-dependencies */
 import * as Sentry from '@sentry/node';
 import 'dotenv/config';
 import express, { json } from 'express';
@@ -7,6 +9,7 @@ import Youch from 'youch';
 import sentryConfig from './config/sentryConfig';
 import './database';
 import routes from './routes';
+import cors from 'cors';
 
 class App {
   constructor() {
@@ -21,11 +24,11 @@ class App {
 
   middlewares() {
     this.server.use(Sentry.Handlers.requestHandler());
-
+    this.server.use(cors());
     this.server.use(json());
     this.server.use(
       '/files',
-      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads'))
+      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads')),
     );
   }
 
@@ -35,7 +38,7 @@ class App {
   }
 
   exceptionHandler() {
-    this.server.use(async (err, req, res, next) => {
+    this.server.use(async (err, req, res) => {
       if (process.env.NODE_ENV === 'development') {
         const errors = await new Youch(err, req).toJSON();
 

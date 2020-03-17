@@ -1,16 +1,16 @@
 import { Router } from 'express';
 import multer from 'multer';
-import multerConfig from '../src/config/multerConfig';
-import PhotosController from './app/controllers/PhotosController';
+import multerConfig from './config/multerConfig';
 import DeliverymansController from './app/controllers/DeliverymansController';
+import OrderDeliveryController from './app/controllers/OrderDeliveryController';
+import OrderManagementsController from './app/controllers/OrderManagementsController';
+import PhotosController from './app/controllers/PhotosController';
+import ProblemsDeliveryController from './app/controllers/ProblemsDeliveryController';
 import RecipientController from './app/controllers/RecipientController';
+import ScheduleController from './app/controllers/ScheduleController';
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
 import AuthenticationMiddleware from './app/middlewares/auth';
-import OrderManagementsController from './app/controllers/OrderManagementsController';
-import OrderDeliveryController from './app/controllers/OrderDeliveryController';
-import ScheduleController from './app/controllers/ScheduleController';
-import ProblemsDeliveryController from './app/controllers/ProblemsDeliveryController';
 
 const routes = Router();
 
@@ -20,28 +20,31 @@ routes.get('/deliverymans/:deliverymanId/deliveries', ScheduleController.index);
 
 routes.put(
   '/deliverymans/:deliverymanId/deliveries/:orderDeliverId',
-  ScheduleController.update
+  ScheduleController.update,
 );
 
 routes.put(
   '/order-delivery/:orderDeliveryId/deliverymans/:deliveryId',
-  OrderDeliveryController.update
+  OrderDeliveryController.update,
 );
 
 routes.get(
   '/order-delivery/:orderDeliveryId/deliverymans',
-  OrderDeliveryController.index
+  OrderDeliveryController.index,
 );
 
-routes.post('/user', UserController.store);
+routes.post('/users', UserController.store);
 
 routes.post('/sessions', SessionController.store);
 
-routes.post('/deliveries/:orderManagementId/problems', ProblemsDeliveryController.store);
+routes.post(
+  '/deliveries/:orderManagementId/problems',
+  ProblemsDeliveryController.store,
+);
 
 routes.use(AuthenticationMiddleware);
 
-routes.put('/user', UserController.update);
+routes.put('/users', UserController.update);
 
 routes.get('/recipient', RecipientController.index);
 
@@ -67,19 +70,19 @@ routes.delete('/deliverymans/:deliveryId', DeliverymansController.delete);
 
 routes.get(
   '/order-management/:orderManagementId',
-  OrderManagementsController.show
+  OrderManagementsController.show,
 );
 
 routes.post('/order-management', OrderManagementsController.store);
 
 routes.put(
   '/order-management/:orderManagementId',
-  OrderManagementsController.update
+  OrderManagementsController.update,
 );
 
 routes.delete(
   '/order-management/:orderManagementId',
-  OrderManagementsController.delete
+  OrderManagementsController.delete,
 );
 
 routes.get('/problems', ProblemsDeliveryController.index);
