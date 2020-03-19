@@ -1,3 +1,7 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-shadow */
+/* eslint-disable class-methods-use-this */
 /**
  * @module DeliverymanController
  */
@@ -35,6 +39,7 @@ class DeliverymanController {
 
     return res.json(deliverymans);
   }
+
   /**
    * @method delete
    * @param {*} req

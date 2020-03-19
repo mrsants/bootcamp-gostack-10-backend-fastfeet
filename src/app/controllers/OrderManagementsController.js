@@ -1,3 +1,7 @@
+/* eslint-disable camelcase */
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-shadow */
+/* eslint-disable class-methods-use-this */
 import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
@@ -8,8 +12,55 @@ import Recipients from '../models/Recipients';
 import NewJobs from '../jobs/NewJobs';
 import Queue from '../../lib/Queue';
 
-
 class OrderManagementsController {
+  /**
+   * @method index
+   * @param {*} req
+   * @param {*} res
+   * @returns {Object} listDelivery
+   * @description Método responsável por listar entregadores.
+   */
+  async index(req, res) {
+    const { page = 1 } = req.query;
+
+    const deliverymans = await OrderManagements.findAll({
+      limit: 20,
+      offset: (page - 1) * 20,
+      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
+      order: ['id'],
+      include: [
+        {
+          model: Recipients,
+          as: 'recipients',
+          attributes: [
+            'name',
+            'street',
+            'district',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'zip_code',
+          ],
+        },
+        {
+          model: Deliverymans,
+          as: 'deliverymans',
+          attributes: ['name', 'email'],
+          include: [
+            {
+              model: Photos,
+              as: 'avatar',
+              attributes: ['name', 'path', 'url'],
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.json(deliverymans);
+  }
+
   /**
    * @method show
    * @param {*} req
@@ -28,6 +79,7 @@ class OrderManagementsController {
           model: Recipients,
           as: 'recipients',
           attributes: [
+            'name',
             'street',
             'district',
             'number',
@@ -72,8 +124,8 @@ class OrderManagementsController {
    * @method show
    * @param {*} req
    * @param {*} res
-   * @returns {Array}  list
-   * @description Método responsável por listar as encomendas.
+   * @returns {Array}  0
+   * @description Método responsável por criar as encomendas.
    */
   async store(req, res) {
     const schema = Yup.object().shape({
@@ -128,6 +180,7 @@ class OrderManagementsController {
           model: Recipients,
           as: 'recipients',
           attributes: [
+            'name',
             'street',
             'district',
             'number',
@@ -157,7 +210,7 @@ class OrderManagementsController {
    * @param {*} req
    * @param {*} res
    * @returns {Object}  orders
-   * @description Método responsável por criar as encomendas.
+   * @description Método responsável por atualizar as encomendas.
    */
   async update(req, res) {
     const schema = Yup.object().shape({
@@ -207,14 +260,11 @@ class OrderManagementsController {
    * @returns {Array}  list
    * @description Método responsável por deletar as encomendas.
    */
-  async delete() {
-    const { OrderManagementsId } = req.params;
+  async delete(req, res) {
+    const id = req.params.orderManagementId;
+    const OrderManager = await OrderManagements.findByPk(id);
 
-    const OrderManagements = await OrderManagements.findByPk(
-      OrderManagementsId
-    );
-
-    if (isNullOrUndefined(OrderManagements)) {
+    if (isNullOrUndefined(OrderManager)) {
       return res.status(400).json({
         error: {
           message: 'Order not exists',
@@ -222,9 +272,11 @@ class OrderManagementsController {
       });
     }
 
-    await OrderManagements.destroy({ where: OrderManagementsId });
+    OrderManager.canceled_at = new Date();
 
-    return res.status(200).json(OrderManagements);
+    await OrderManager.save();
+
+    return res.status(200).json(OrderManager);
   }
 }
 

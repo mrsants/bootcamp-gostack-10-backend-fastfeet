@@ -69,6 +69,12 @@ routes.put('/deliverymans/:deliveryId', DeliverymansController.update);
 routes.delete('/deliverymans/:deliveryId', DeliverymansController.delete);
 
 routes.get(
+  '/order-management',
+  OrderManagementsController.index,
+);
+
+
+routes.get(
   '/order-management/:orderManagementId',
   OrderManagementsController.show,
 );

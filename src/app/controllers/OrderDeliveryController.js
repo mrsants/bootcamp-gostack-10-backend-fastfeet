@@ -1,3 +1,7 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable no-shadow */
+/* eslint-disable camelcase */
+/* eslint-disable class-methods-use-this */
 import { format, startOfHour } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { Op } from 'sequelize';
@@ -133,11 +137,13 @@ class OrderDeliveryController {
       locale: pt,
     });
 
-    const { id, product, start_date, end_date } = await OrderManagements.update(
+    const {
+      id, product, start_date, end_date,
+    } = await OrderManagements.update(
       {
         end_date: formattedDate,
         signature_id,
-      }
+      },
     );
 
     return res.status(200).json({

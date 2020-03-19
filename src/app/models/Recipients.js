@@ -4,6 +4,7 @@ class Recipients extends Model {
   static init(sequelize) {
     super.init(
       {
+        name: Sequelize.STRING,
         street: Sequelize.STRING,
         district: Sequelize.STRING,
         number: Sequelize.STRING,
@@ -12,7 +13,7 @@ class Recipients extends Model {
         city: Sequelize.STRING,
         zip_code: Sequelize.STRING,
       },
-      { sequelize }
+      { sequelize },
     );
   }
 }

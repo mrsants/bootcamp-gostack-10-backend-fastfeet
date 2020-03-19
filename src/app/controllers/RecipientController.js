@@ -1,10 +1,12 @@
+/* eslint-disable camelcase */
+/* eslint-disable class-methods-use-this */
 /**
  * @module RecipientController
  */
 
 import * as Yup from 'yup';
-import Recipients from '../models/Recipients';
 import { isNullOrUndefined } from 'util';
+import Recipients from '../models/Recipients';
 
 /** RecipientController é responsável pelo controle dos destinários. */
 class RecipientController {
@@ -56,6 +58,7 @@ class RecipientController {
    */
   async store(req, res) {
     const schema = Yup.object().shape({
+      name: Yup.string(),
       street: Yup.string().required(),
       district: Yup.string().required(),
       number: Yup.string().required(),
@@ -75,6 +78,7 @@ class RecipientController {
     }
 
     const {
+      name,
       street,
       district,
       number,
@@ -85,6 +89,7 @@ class RecipientController {
     } = await Recipients.create(req.body);
 
     return res.status(201).json({
+      name,
       street,
       district,
       number,
@@ -106,6 +111,7 @@ class RecipientController {
     const { recipientId } = req.params;
 
     const schema = Yup.object().shape({
+      name: Yup.string(),
       street: Yup.string(),
       district: Yup.string(),
       number: Yup.string(),
@@ -186,7 +192,7 @@ class RecipientController {
     });
 
     return res.status(200).json({
-      message: `Recipient successfully deleted`,
+      message: 'Recipient successfully deleted',
     });
   }
 }
