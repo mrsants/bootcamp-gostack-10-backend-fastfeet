@@ -2,15 +2,15 @@
 /* eslint-disable no-use-before-define */
 /* eslint-disable no-shadow */
 /* eslint-disable class-methods-use-this */
+import { Op } from 'sequelize';
 import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
+import Queue from '../../lib/Queue';
+import NewJobs from '../jobs/NewJobs';
 import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import Photos from '../models/Photos';
 import Recipients from '../models/Recipients';
-
-import NewJobs from '../jobs/NewJobs';
-import Queue from '../../lib/Queue';
 
 class OrderManagementsController {
   /**
@@ -21,9 +21,15 @@ class OrderManagementsController {
    * @description Método responsável por listar entregadores.
    */
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { product, page = 1 } = req.query;
 
     const deliverymans = await OrderManagements.findAll({
+      where: {
+        product: {
+          [Op.iLike]: `%${product}%`,
+        },
+      },
+      order: [['created_at', 'DESC']],
       limit: 20,
       offset: (page - 1) * 20,
       attributes: [
