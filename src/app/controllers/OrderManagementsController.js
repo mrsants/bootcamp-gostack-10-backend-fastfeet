@@ -26,7 +26,15 @@ class OrderManagementsController {
     const deliverymans = await OrderManagements.findAll({
       limit: 20,
       offset: (page - 1) * 20,
-      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
+      attributes: [
+        'id',
+        'product',
+        'start_date',
+        'end_date',
+        'canceled_at',
+        'cancelable',
+        'status',
+      ],
       order: ['id'],
       include: [
         {
