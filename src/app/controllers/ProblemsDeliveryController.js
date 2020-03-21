@@ -1,13 +1,13 @@
+/* eslint-disable class-methods-use-this */
 import { format, startOfHour } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import * as Yup from 'yup';
+import Queue from '../../lib/Queue';
+import CancelJobs from '../jobs/CancelJobs';
 import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import ProblemsDeliverys from '../models/ProblemsDeliverys';
-import Recipient from '../models/Recipients';
-
-import Queue from '../../lib/Queue';
-import CancelJobs from '../jobs/CancelJobs';
+import Recipients from '../models/Recipients';
 
 class ProblemsDeliveryController {
   /**
@@ -17,19 +17,46 @@ class ProblemsDeliveryController {
    * @returns {Object} listDelivery
    * @description Método responsável por listar os problemas das encomendas.
    */
+
   async index(req, res) {
-    const problem = await ProblemsDeliverys.findAll({
-      attributes: ['id', 'description'],
+    const { page = 1 } = req.query;
+    const deliveryPromblens = await ProblemsDeliverys.findAll({
       include: [
         {
           model: OrderManagements,
           as: 'order_managements',
-          attributes: ['id', 'product', 'start_date', 'canceled_at'],
+          attributes: ['id', 'product'],
+          include: [
+            {
+              model: Deliverymans,
+              as: 'deliverymans',
+              attributes: ['id', 'name'],
+            },
+            {
+              model: Recipients,
+              as: 'recipients',
+              attributes: [
+                'id',
+                'name',
+                'street',
+                'district',
+                'number',
+                'complement',
+                'state',
+                'city',
+                'zip_code',
+              ],
+            },
+          ],
         },
       ],
+      attributes: ['id', 'description'],
+      order: [['created_at', 'DESC']],
+      limit: 20,
+      offset: (page - 1) * 20,
     });
 
-    return res.status(200).json(problem);
+    return res.json(deliveryPromblens);
   }
 
   /**
@@ -119,6 +146,7 @@ class ProblemsDeliveryController {
       return res.status(400).json({ error: 'Problem not found' });
     }
 
+    // eslint-disable-next-line camelcase
     const { order_managements_id } = problem;
 
     const orderManagement = await OrderManagements.findByPk(
@@ -127,7 +155,7 @@ class ProblemsDeliveryController {
         attributes: ['id', 'product', 'canceled_at'],
         include: [
           {
-            model: Recipient,
+            model: Recipients,
             as: 'recipients',
             attributes: [
               'street',
@@ -145,7 +173,7 @@ class ProblemsDeliveryController {
             attributes: ['id', 'name', 'email'],
           },
         ],
-      }
+      },
     );
 
     if (orderManagement.canceled_at) {

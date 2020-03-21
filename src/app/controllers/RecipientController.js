@@ -4,8 +4,9 @@
  * @module RecipientController
  */
 
-import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import { isNullOrUndefined } from 'util';
+import * as Yup from 'yup';
 import Recipients from '../models/Recipients';
 
 /** RecipientController é responsável pelo controle dos destinários. */
@@ -17,9 +18,32 @@ class RecipientController {
    * @returns {Array} listRecipient
    * @description Método responsável por retorna uma lista de destinários
    */
-  async index(_, res) {
-    const listRecipient = await Recipients.findAll();
-    return res.status(200).json(listRecipient);
+  async index(req, res) {
+    const { name, page = 1 } = req.query;
+
+    const recipients = await Recipients.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      },
+      attributes: [
+        'id',
+        'name',
+        'street',
+        'district',
+        'number',
+        'complement',
+        'state',
+        'city',
+        'zip_code',
+      ],
+      order: [['created_at', 'DESC']],
+      limit: 20,
+      offset: (page - 1) * 20,
+    });
+
+    return res.json(recipients);
   }
 
   /**
@@ -142,25 +166,25 @@ class RecipientController {
     }
 
     const {
-      id,
       name,
       street,
+      district,
       number,
       complement,
       state,
       city,
-      cep,
+      zip_code,
     } = await recipient.update(req.body);
 
     return res.status(200).json({
-      id,
       name,
       street,
+      district,
       number,
       complement,
       state,
       city,
-      cep,
+      zip_code,
     });
   }
 
