@@ -18,7 +18,6 @@ class OrderManagements extends Model {
           type: Sequelize.VIRTUAL,
           get() {
             let status = 'PENDENTE';
-
             if (this.canceled_at) {
               status = 'CANCELADA';
             }

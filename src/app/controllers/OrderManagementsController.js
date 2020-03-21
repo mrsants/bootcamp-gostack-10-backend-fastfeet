@@ -226,44 +226,60 @@ class OrderManagementsController {
    * @description Método responsável por atualizar as encomendas.
    */
   async update(req, res) {
+    const { orderManagementId } = req.params;
+
+    const { recipient_id, deliveryman_id } = req.body;
+
     const schema = Yup.object().shape({
       product: Yup.string(),
       recipient_id: Yup.number(),
       deliveryman_id: Yup.number(),
-      signature_id: Yup.number(),
-      canceled_at: Yup.date(),
-      start_date: Yup.date(),
-      end_date: Yup.date(),
     });
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({
-        error: {
-          message: 'Validations fails',
-          statusCode: 401,
-        },
-      });
+    try {
+      await schema.validate(req.body);
+
+      const order = await OrderManagements.findByPk(orderManagementId);
+
+
+      if (!order) {
+        return res.status(401).json({ error: 'Order cannot exists.' });
+      }
+
+      const recipientExists = await Recipients.findByPk(recipient_id);
+      const deliverymanExists = await Deliverymans.findByPk(deliveryman_id);
+
+      if (isNullOrUndefined(recipientExists)) {
+        return res.status(401).json({
+          error: {
+            message: 'Recipient cannot exists.',
+            statusCode: 401,
+          },
+        });
+      }
+
+      if (isNullOrUndefined(deliverymanExists)) {
+        return res.status(401).json({
+          error: {
+            message: 'Deliveryman cannot exists.',
+            statusCode: 401,
+          },
+        });
+      }
+
+      if (order.start_date && order.deliveryman_id !== deliveryman_id) {
+        return res.status(401).json({
+          error:
+            'The order has left for delivery, you cannot change the delivery man',
+        });
+      }
+
+      await order.update(req.body);
+
+      return res.json(order);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
     }
-
-    const {
-      product,
-      recipient_id,
-      deliveryman_id,
-      signature_id,
-      canceled_at,
-      start_date,
-      end_date,
-    } = OrderManagements.update(req.body);
-
-    return res.status(201).json({
-      product,
-      recipient_id,
-      deliveryman_id,
-      signature_id,
-      canceled_at,
-      start_date,
-      end_date,
-    });
   }
 
   /**

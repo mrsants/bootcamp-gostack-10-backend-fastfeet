@@ -9,7 +9,7 @@ class Deliverymans extends Model {
       },
       {
         sequelize,
-      }
+      },
     );
 
     return this;
