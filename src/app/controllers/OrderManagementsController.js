@@ -29,7 +29,7 @@ class OrderManagementsController {
           [Op.iLike]: `%${product}%`,
         },
       },
-      order: [['created_at', 'DESC']],
+      order: [['created_at']],
       limit: 20,
       offset: (page - 1) * 20,
       attributes: [
@@ -41,7 +41,6 @@ class OrderManagementsController {
         'cancelable',
         'status',
       ],
-      order: ['id'],
       include: [
         {
           model: Recipients,

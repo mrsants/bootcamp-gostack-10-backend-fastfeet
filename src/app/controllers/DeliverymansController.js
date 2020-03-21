@@ -6,11 +6,11 @@
  * @module DeliverymanController
  */
 
+import { Op } from 'sequelize';
 import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
 import Photos from '../models/Photos';
-
 /** DeliverymanController é responsável pelo controle de entregadores. */
 class DeliverymanController {
   /**
@@ -21,9 +21,15 @@ class DeliverymanController {
    * @description Método responsável por listar entregadores.
    */
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { name, page = 1 } = req.query;
 
     const deliverymans = await Deliverymans.findAll({
+      where: {
+        name: {
+          [Op.iLike]: `%${name}%`,
+        },
+      },
+      order: [['created_at']],
       limit: 20,
       offset: (page - 1) * 20,
       attributes: ['id', 'name', 'email'],

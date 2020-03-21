@@ -15,7 +15,7 @@ class Photos extends Model {
       },
       {
         sequelize,
-      }
+      },
     );
 
     return this;
