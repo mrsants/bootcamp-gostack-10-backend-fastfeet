@@ -1,34 +1,33 @@
-/* eslint-disable import/order */
-/* eslint-disable import/no-extraneous-dependencies */
 import * as Sentry from '@sentry/node';
+import cors from 'cors';
 import 'dotenv/config';
-import express, { json } from 'express';
+import express from 'express';
 import 'express-async-errors';
-import path from 'path';
+import { resolve } from 'path';
 import Youch from 'youch';
-import sentryConfig from './config/sentryConfig';
+import sentrConfig from './config/sentryConfig';
 import './database';
 import routes from './routes';
-import cors from 'cors';
+
 
 class App {
   constructor() {
     this.server = express();
 
-    Sentry.init(sentryConfig);
+    Sentry.init(sentrConfig);
 
     this.middlewares();
     this.routes();
-    this.exceptionHandler();
+    this.execptionHandler();
   }
 
   middlewares() {
     this.server.use(Sentry.Handlers.requestHandler());
     this.server.use(cors());
-    this.server.use(json());
+    this.server.use(express.json());
     this.server.use(
       '/files',
-      express.static(path.resolve(__dirname, '..', 'tmp', 'uploads')),
+      express.static(resolve(__dirname, '..', 'tmp', 'uploads')),
     );
   }
 
@@ -37,16 +36,15 @@ class App {
     this.server.use(Sentry.Handlers.errorHandler());
   }
 
-  exceptionHandler() {
-    this.server.use(async (err, req, res) => {
+  execptionHandler() {
+    this.server.use(async (err, req, res, next) => {
       if (process.env.NODE_ENV === 'development') {
         const errors = await new Youch(err, req).toJSON();
 
-        return res.status(500).json(errors);
+        return res.status(500).json({ errors });
       }
-      return res.status(500).json({
-        error: 'Internal server error',
-      });
+
+      return res.status(500).json({ error: 'Internal server error' });
     });
   }
 }
