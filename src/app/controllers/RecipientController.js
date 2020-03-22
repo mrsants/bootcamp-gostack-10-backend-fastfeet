@@ -31,7 +31,6 @@ class RecipientController {
         'id',
         'name',
         'street',
-        'district',
         'number',
         'complement',
         'state',
@@ -84,7 +83,6 @@ class RecipientController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       street: Yup.string().required(),
-      district: Yup.string().required(),
       number: Yup.string().required(),
       complement: Yup.string(),
       state: Yup.string().required(),
@@ -104,7 +102,6 @@ class RecipientController {
     const {
       name,
       street,
-      district,
       number,
       complement,
       state,
@@ -115,7 +112,6 @@ class RecipientController {
     return res.status(201).json({
       name,
       street,
-      district,
       number,
       complement,
       state,
@@ -137,7 +133,6 @@ class RecipientController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       street: Yup.string(),
-      district: Yup.string(),
       number: Yup.string(),
       complement: Yup.string(),
       state: Yup.string(),
@@ -168,7 +163,6 @@ class RecipientController {
     const {
       name,
       street,
-      district,
       number,
       complement,
       state,
@@ -179,7 +173,6 @@ class RecipientController {
     return res.status(200).json({
       name,
       street,
-      district,
       number,
       complement,
       state,
