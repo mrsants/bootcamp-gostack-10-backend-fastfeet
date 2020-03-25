@@ -48,7 +48,6 @@ class OrderManagementsController {
           attributes: [
             'name',
             'street',
-            'district',
             'number',
             'complement',
             'state',
@@ -94,7 +93,6 @@ class OrderManagementsController {
           attributes: [
             'name',
             'street',
-            'district',
             'number',
             'complement',
             'state',
@@ -147,6 +145,7 @@ class OrderManagementsController {
       deliveryman_id: Yup.number().required(),
     });
 
+    console.log(req.body);
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({
         error: {
@@ -195,7 +194,6 @@ class OrderManagementsController {
           attributes: [
             'name',
             'street',
-            'district',
             'number',
             'complement',
             'state',
@@ -240,7 +238,6 @@ class OrderManagementsController {
       await schema.validate(req.body);
 
       const order = await OrderManagements.findByPk(orderManagementId);
-
 
       if (!order) {
         return res.status(401).json({ error: 'Order cannot exists.' });
