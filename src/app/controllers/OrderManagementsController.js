@@ -67,6 +67,11 @@ class OrderManagementsController {
             },
           ],
         },
+        {
+          model: Photos,
+          as: 'signatures',
+          attributes: ['name', 'path', 'url'],
+        },
       ],
     });
 

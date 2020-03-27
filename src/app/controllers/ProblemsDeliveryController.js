@@ -39,7 +39,6 @@ class ProblemsDeliveryController {
                 'id',
                 'name',
                 'street',
-                'district',
                 'number',
                 'complement',
                 'state',
@@ -159,7 +158,6 @@ class ProblemsDeliveryController {
             as: 'recipients',
             attributes: [
               'street',
-              'district',
               'number',
               'complement',
               'state',
