@@ -75,19 +75,19 @@ routes.get(
 
 
 routes.get(
-  '/order-management/:orderManagementId',
+  '/order-management/:id',
   OrderManagementsController.show,
 );
 
 routes.post('/order-management', OrderManagementsController.store);
 
 routes.put(
-  '/order-management/:orderManagementId',
+  '/order-management/:id',
   OrderManagementsController.update,
 );
 
 routes.delete(
-  '/order-management/:orderManagementId',
+  '/order-management/:id',
   OrderManagementsController.delete,
 );
 

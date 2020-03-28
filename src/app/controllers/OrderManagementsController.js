@@ -86,11 +86,19 @@ class OrderManagementsController {
    * @description Método responsável por listar as encomendas por entregador.
    */
   async show(req, res) {
-    const { OrderManagementsId } = req.params;
+    const { id } = req.params;
 
-    const OrderManagements = await OrderManagements.findOne({
-      where: { id: OrderManagementsId },
-      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
+    const orderManagements = await OrderManagements.findOne({
+      where: { id },
+      attributes: [
+        'id',
+        'product',
+        'start_date',
+        'end_date',
+        'canceled_at',
+        'cancelable',
+        'status',
+      ],
       include: [
         {
           model: Recipients,
@@ -125,7 +133,7 @@ class OrderManagementsController {
       ],
     });
 
-    if (isNullOrUndefined(OrderManagements)) {
+    if (isNullOrUndefined(orderManagements)) {
       return res.status(400).json({
         error: {
           message: 'Order not found',
@@ -133,7 +141,7 @@ class OrderManagementsController {
       });
     }
 
-    return res.status(200).json(OrderManagements);
+    return res.status(200).json(orderManagements);
   }
 
   /**
@@ -150,7 +158,6 @@ class OrderManagementsController {
       deliveryman_id: Yup.number().required(),
     });
 
-    console.log(req.body);
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({
         error: {
@@ -229,7 +236,7 @@ class OrderManagementsController {
    * @description Método responsável por atualizar as encomendas.
    */
   async update(req, res) {
-    const { orderManagementId } = req.params;
+    const { id } = req.params;
 
     const { recipient_id, deliveryman_id } = req.body;
 
@@ -242,7 +249,7 @@ class OrderManagementsController {
     try {
       await schema.validate(req.body);
 
-      const order = await OrderManagements.findByPk(orderManagementId);
+      const order = await OrderManagements.findByPk(id);
 
       if (!order) {
         return res.status(401).json({ error: 'Order cannot exists.' });
@@ -292,7 +299,7 @@ class OrderManagementsController {
    * @description Método responsável por deletar as encomendas.
    */
   async delete(req, res) {
-    const id = req.params.orderManagementId;
+    const { id } = req.params;
     const OrderManager = await OrderManagements.findByPk(id);
 
     if (isNullOrUndefined(OrderManager)) {
