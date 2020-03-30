@@ -1,4 +1,6 @@
-import { endOfDay, format, startOfDay, startOfHour } from 'date-fns';
+import {
+  endOfDay, format, startOfDay, startOfHour,
+} from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { Op } from 'sequelize';
 import { isNullOrUndefined } from 'util';
@@ -15,9 +17,9 @@ class ScheduleController {
    * @description Método responsável por listar as encomendas por entregador.
    */
   async index(req, res) {
-    const { deliverymanId } = req.params;
+    const { id } = req.params;
 
-    const deliverymans = await Deliverymans.findByPk(deliverymanId);
+    const deliverymans = await Deliverymans.findByPk(id);
 
     if (isNullOrUndefined(deliverymans)) {
       res.status(400).json({ error: 'Deliveryman not found' });
@@ -25,7 +27,7 @@ class ScheduleController {
 
     const deliveries = await OrderManagements.findAll({
       where: {
-        deliveryman_id: deliverymanId,
+        deliveryman_id: id,
         end_date: null,
         start_date: null,
       },
@@ -62,21 +64,21 @@ class ScheduleController {
    * @description
    */
   async update(req, res) {
-    const { deliverymanId, orderDeliverId } = req.params;
+    const { idDeliveryman, idOrder } = req.params;
 
-    const deliverymans = await Deliverymans.findByPk(deliverymanId);
+    const deliverymans = await Deliverymans.findByPk(idDeliveryman);
 
     if (isNullOrUndefined(deliverymans)) {
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
-    const orderManagements = await OrderManagements.findByPk(orderDeliverId);
+    const orderManagements = await OrderManagements.findByPk(idOrder);
 
     if (isNullOrUndefined(orderManagements)) {
       res.status(400).json({ error: 'Deliveryman not found' });
     }
 
-    if (orderManagements.deliveryman_id !== Number(orderDeliverId)) {
+    if (orderManagements.deliveryman_id !== Number(idOrder)) {
       return res.status(401).json({
         error: {
           message: 'You can only edit deliveries that you own',
@@ -107,7 +109,7 @@ class ScheduleController {
         start_date: {
           [Op.between]: [startOfDay(now.getTime(), endOfDay(now.getTime))],
         },
-        deliveryman_id: deliveryId,
+        deliveryman_id: idDeliveryman,
       },
     });
 
@@ -119,9 +121,13 @@ class ScheduleController {
       });
     }
 
-    const { id, product, start_date, end_date } = await orderManagements.update({
-      start_date: formattedDate,
-    });
+    const {
+      id, product, start_date, end_date,
+    } = await orderManagements.update(
+      {
+        start_date: formattedDate,
+      },
+    );
 
     return res.status(200).json({
       id,

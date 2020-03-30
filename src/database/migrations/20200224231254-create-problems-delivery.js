@@ -1,5 +1,6 @@
+/* eslint-disable camelcase */
 module.exports = {
-  up: (queryInterface, Sequelize) => queryInterface.createTable('problems_deliverys', {
+  up: (queryInterface, Sequelize) => queryInterface.createTable('problems', {
     id: {
       type: Sequelize.INTEGER,
       allowNull: false,
@@ -20,5 +21,5 @@ module.exports = {
     },
   }),
 
-  down: (queryInterface) => queryInterface.dropTable('problems_deliverys'),
+  down: (queryInterface) => queryInterface.dropTable('problems'),
 };

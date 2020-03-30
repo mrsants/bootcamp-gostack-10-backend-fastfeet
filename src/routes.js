@@ -5,8 +5,8 @@ import DeliverymansController from './app/controllers/DeliverymansController';
 import OrderDeliveryController from './app/controllers/OrderDeliveryController';
 import OrderManagementsController from './app/controllers/OrderManagementsController';
 import PhotosController from './app/controllers/PhotosController';
-import ProblemsDeliveryController from './app/controllers/ProblemsDeliveryController';
-import RecipientController from './app/controllers/RecipientController';
+import ProblemsController from './app/controllers/ProblemsController';
+import RecipientsController from './app/controllers/RecipientsController';
 import ScheduleController from './app/controllers/ScheduleController';
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
@@ -16,45 +16,39 @@ const routes = Router();
 
 const upload = multer(multerConfig);
 
-routes.get('/deliverymans/:deliverymanId/deliveries', ScheduleController.index);
+routes.get('/deliverymans/:id/deliveries', ScheduleController.index);
 
 routes.put(
-  '/deliverymans/:deliverymanId/deliveries/:orderDeliverId',
+  '/deliverymans/:idDeliveryman/deliveries/:idOrder',
   ScheduleController.update,
 );
 
 routes.put(
-  '/order-delivery/:orderDeliveryId/deliverymans/:deliveryId',
+  '/order-delivery/:idOrder/deliverymans/:idDelivery',
   OrderDeliveryController.update,
 );
 
-routes.get(
-  '/order-delivery/:orderDeliveryId/deliverymans',
-  OrderDeliveryController.index,
-);
+routes.get('/order-delivery/:id/deliverymans', OrderDeliveryController.index);
 
 routes.post('/users', UserController.store);
 
 routes.post('/sessions', SessionController.store);
 
-routes.post(
-  '/deliveries/:orderManagementId/problems',
-  ProblemsDeliveryController.store,
-);
+routes.post('/deliveries/:id/problems', ProblemsController.store);
 
 routes.use(AuthenticationMiddleware);
 
 routes.put('/users', UserController.update);
 
-routes.get('/recipient', RecipientController.index);
+routes.get('/recipients', RecipientsController.index);
 
-routes.get('/recipient/:recipientId', RecipientController.show);
+routes.get('/recipients/:id', RecipientsController.show);
 
-routes.post('/recipient', RecipientController.store);
+routes.post('/recipients', RecipientsController.store);
 
-routes.put('/recipient/:recipientId', RecipientController.update);
+routes.put('/recipients/:id', RecipientsController.update);
 
-routes.delete('/recipient/:recipientId', RecipientController.delete);
+routes.delete('/recipients/:id', RecipientsController.delete);
 
 routes.post('/photos', upload.single('photos'), PhotosController.store);
 
@@ -68,32 +62,20 @@ routes.put('/deliverymans/:id', DeliverymansController.update);
 
 routes.delete('/deliverymans/:id', DeliverymansController.delete);
 
-routes.get(
-  '/order-management',
-  OrderManagementsController.index,
-);
+routes.get('/order-management', OrderManagementsController.index);
 
-routes.get(
-  '/order-management/:id',
-  OrderManagementsController.show,
-);
+routes.get('/order-management/:id', OrderManagementsController.show);
 
 routes.post('/order-management', OrderManagementsController.store);
 
-routes.put(
-  '/order-management/:id',
-  OrderManagementsController.update,
-);
+routes.put('/order-management/:id', OrderManagementsController.update);
 
-routes.delete(
-  '/order-management/:id',
-  OrderManagementsController.delete,
-);
+routes.delete('/order-management/:id', OrderManagementsController.delete);
 
-routes.get('/problems', ProblemsDeliveryController.index);
+routes.get('/problems', ProblemsController.index);
 
-routes.get('/problems/:orderManagementId', ProblemsDeliveryController.show);
+routes.get('/problems/:id', ProblemsController.show);
 
-routes.delete('/problems/:problemId', ProblemsDeliveryController.delete);
+routes.delete('/problems/:id', ProblemsController.delete);
 
 export default routes;

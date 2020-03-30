@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 import { format, startOfHour } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import * as Yup from 'yup';
@@ -6,10 +5,10 @@ import Queue from '../../lib/Queue';
 import CancelJobs from '../jobs/CancelJobs';
 import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
-import ProblemsDeliverys from '../models/ProblemsDeliverys';
+import Problems from '../models/Problems';
 import Recipients from '../models/Recipients';
 
-class ProblemsDeliveryController {
+class ProblemsController {
   /**
    * @method index
    * @param {*} req
@@ -20,7 +19,11 @@ class ProblemsDeliveryController {
 
   async index(req, res) {
     const { page = 1 } = req.query;
-    const deliveryPromblens = await ProblemsDeliverys.findAll({
+    const deliveryPromblens = await Problems.findAll({
+      attributes: ['id', 'description'],
+      order: [['created_at', 'DESC']],
+      limit: 20,
+      offset: (page - 1) * 20,
       include: [
         {
           model: OrderManagements,
@@ -49,10 +52,6 @@ class ProblemsDeliveryController {
           ],
         },
       ],
-      attributes: ['id', 'description'],
-      order: [['created_at', 'DESC']],
-      limit: 20,
-      offset: (page - 1) * 20,
     });
 
     return res.json(deliveryPromblens);
@@ -66,10 +65,10 @@ class ProblemsDeliveryController {
    * @description Método responsável por listar os problemas das encomendas por id.
    */
   async show(req, res) {
-    const { orderManagementId } = req.params;
+    const { id } = req.params;
 
-    const problem = await ProblemsDeliverys.findOne({
-      where: { order_managements_id: orderManagementId },
+    const problem = await Problems.findOne({
+      where: { order_managements_id: id },
       attributes: ['id', 'description'],
       include: [
         {
@@ -107,8 +106,8 @@ class ProblemsDeliveryController {
       });
     }
 
-    const { orderManagementId } = req.params;
-    const delivery = await OrderManagements.findByPk(orderManagementId);
+    const { id } = req.params;
+    const delivery = await OrderManagements.findByPk(id);
 
     if (!delivery) {
       return res.status(400).json({
@@ -118,9 +117,9 @@ class ProblemsDeliveryController {
 
     const { description } = req.body;
 
-    const deliveryProblem = await ProblemsDeliverys.create({
+    const deliveryProblem = await Problems.create({
       description,
-      order_managements_id: orderManagementId,
+      order_managements_id: id,
     });
 
     return res.json(deliveryProblem);
@@ -135,9 +134,9 @@ class ProblemsDeliveryController {
    */
 
   async delete(req, res) {
-    const { problemId } = req.params;
+    const { id } = req.params;
 
-    const problem = await ProblemsDeliverys.findByPk(problemId, {
+    const problem = await Problems.findByPk(id, {
       attributes: ['id', 'description', 'order_managements_id'],
     });
 
@@ -199,4 +198,4 @@ class ProblemsDeliveryController {
   }
 }
 
-export default new ProblemsDeliveryController();
+export default new ProblemsController();

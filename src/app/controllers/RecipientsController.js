@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable class-methods-use-this */
 /**
- * @module RecipientController
+ * @module RecipientsController
  */
 
 import { Op } from 'sequelize';
@@ -9,8 +9,8 @@ import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
 import Recipients from '../models/Recipients';
 
-/** RecipientController é responsável pelo controle dos destinários. */
-class RecipientController {
+/** RecipientsController é responsável pelo controle dos destinários. */
+class RecipientsController {
   /**
    * @method index
    * @param {*} req
@@ -27,6 +27,9 @@ class RecipientController {
           [Op.iLike]: `%${name}%`,
         },
       },
+      order: [['created_at']],
+      limit: 20,
+      offset: (page - 1) * 20,
       attributes: [
         'id',
         'name',
@@ -37,9 +40,6 @@ class RecipientController {
         'city',
         'zip_code',
       ],
-      order: [['created_at', 'DESC']],
-      limit: 20,
-      offset: (page - 1) * 20,
     });
 
     return res.json(recipients);
@@ -53,9 +53,9 @@ class RecipientController {
    * @description Método responsável por retorna uma lista de destinários por id.
    */
   async show(req, res) {
-    const { recipientId } = req.params;
+    const { id } = req.params;
 
-    const recipient = await Recipients.findByPk(recipientId);
+    const recipient = await Recipients.findByPk(id);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({
@@ -128,7 +128,7 @@ class RecipientController {
    * @description Método responsável por atualizar um destinário por id.
    */
   async update(req, res) {
-    const { recipientId } = req.params;
+    const { id } = req.params;
 
     const schema = Yup.object().shape({
       name: Yup.string(),
@@ -149,7 +149,7 @@ class RecipientController {
       });
     }
 
-    const recipient = await Recipients.findByPk(recipientId);
+    const recipient = await Recipients.findByPk(id);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({
@@ -189,9 +189,9 @@ class RecipientController {
    * @description Método responsável por deletar um destinário por id.
    */
   async delete(req, res) {
-    const { recipientId } = req.params;
+    const { id } = req.params;
 
-    const recipient = await Recipients.findByPk(recipientId);
+    const recipient = await Recipients.findByPk(id);
 
     if (isNullOrUndefined(recipient)) {
       return res.status(401).json({
@@ -204,7 +204,7 @@ class RecipientController {
 
     await Recipients.destroy({
       where: {
-        id: recipientId,
+        id,
       },
     });
 
@@ -214,4 +214,4 @@ class RecipientController {
   }
 }
 
-export default new RecipientController();
+export default new RecipientsController();

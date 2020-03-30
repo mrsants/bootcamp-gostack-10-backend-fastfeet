@@ -1,7 +1,3 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-shadow */
-/* eslint-disable camelcase */
-/* eslint-disable class-methods-use-this */
 import { format, startOfHour } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { Op } from 'sequelize';
@@ -21,9 +17,9 @@ class OrderDeliveryController {
    * @description Método responsável por listar as encomendas por entregador.
    */
   async index(req, res) {
-    const { orderDeliveryId } = req.params;
+    const { id } = req.params;
 
-    const deliverymans = await Deliverymans.findByPk(orderDeliveryId);
+    const deliverymans = await Deliverymans.findByPk(id);
 
     if (isNullOrUndefined(deliverymans)) {
       return res.status(400).json({ error: 'Deliveryman not found' });
@@ -31,7 +27,7 @@ class OrderDeliveryController {
 
     const deliveried = await OrderManagements.findAll({
       where: {
-        deliveryman_id: orderDeliveryId,
+        deliveryman_id: id,
         end_date: { [Op.not]: null },
       },
       attributes: ['id', 'product', 'start_date', 'end_date'],
@@ -74,7 +70,7 @@ class OrderDeliveryController {
    * @description Método responsável por criar as encomendas.
    */
   async update(req, res) {
-    const { deliveryId, orderDeliveryId } = req.params;
+    const { idDelivery, idOrder } = req.params;
     const { signature_id } = req.body;
 
     const schema = Yup.object().shape({
@@ -90,19 +86,19 @@ class OrderDeliveryController {
       });
     }
 
-    const deliverymans = await Deliverymans.findByPk(deliveryId);
+    const deliverymans = await Deliverymans.findByPk(idDelivery);
 
     if (isNullOrUndefined(deliverymans)) {
       return res.status(401).json({ error: 'Deliveryman not found' });
     }
 
-    const OrderManagements = await OrderManagements.findByPk(orderDeliveryId);
+    const orderManagements = await OrderManagements.findByPk(idOrder);
 
-    if (isNullOrUndefined(OrderManagements)) {
+    if (isNullOrUndefined(orderManagements)) {
       return res.status(401).json({ error: 'Order delivery not found' });
     }
 
-    if (OrderManagements.deliveryman_id !== Number(deliveryId)) {
+    if (orderManagements.deliveryman_id !== Number(idDelivery)) {
       return res.status(401).json({
         error: {
           message: 'You can only edit deliveries that you own',
@@ -111,7 +107,7 @@ class OrderDeliveryController {
       });
     }
 
-    if (!OrderManagements.start_date) {
+    if (!orderManagements.start_date) {
       return res.status(401).json({
         error: {
           message: 'You did not withdraw this delivery yet',
@@ -120,7 +116,7 @@ class OrderDeliveryController {
       });
     }
 
-    if (OrderManagements.end_date) {
+    if (orderManagements.end_date) {
       return res.status(401).json({
         error: {
           message: 'You have already finished this delivery',

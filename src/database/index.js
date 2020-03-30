@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-expressions */
 import Sequelize from 'sequelize';
 import Deliverymans from '../app/models/Deliverymans';
 import OrderManagements from '../app/models/OrderManagements';
 import Photos from '../app/models/Photos';
-import ProblemsDeliverys from '../app/models/ProblemsDeliverys';
+import Problems from '../app/models/Problems';
 import Recipients from '../app/models/Recipients';
 import User from '../app/models/User';
 import databaseConfig from '../config/database';
@@ -13,7 +14,7 @@ const models = [
   Photos,
   Deliverymans,
   OrderManagements,
-  ProblemsDeliverys,
+  Problems,
 ];
 
 class Database {
@@ -25,8 +26,9 @@ class Database {
     this.connection = new Sequelize(databaseConfig);
 
     models
-      .map(model => model.init(this.connection))
-      .map(model => {
+      .map((model) => model.init(this.connection))
+      // eslint-disable-next-line array-callback-return
+      .map((model) => {
         if (model && model.associate) {
           model.associate && model.associate(this.connection.models);
         }

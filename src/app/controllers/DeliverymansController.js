@@ -1,7 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-use-before-define */
-/* eslint-disable no-shadow */
-/* eslint-disable class-methods-use-this */
 /**
  * @module DeliverymansController
  */
