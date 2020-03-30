@@ -60,19 +60,18 @@ routes.post('/photos', upload.single('photos'), PhotosController.store);
 
 routes.get('/deliverymans', DeliverymansController.index);
 
-routes.get('/deliverymans/:deliveryId', DeliverymansController.show);
+routes.get('/deliverymans/:id', DeliverymansController.show);
 
 routes.post('/deliverymans', DeliverymansController.store);
 
-routes.put('/deliverymans/:deliveryId', DeliverymansController.update);
+routes.put('/deliverymans/:id', DeliverymansController.update);
 
-routes.delete('/deliverymans/:deliveryId', DeliverymansController.delete);
+routes.delete('/deliverymans/:id', DeliverymansController.delete);
 
 routes.get(
   '/order-management',
   OrderManagementsController.index,
 );
-
 
 routes.get(
   '/order-management/:id',

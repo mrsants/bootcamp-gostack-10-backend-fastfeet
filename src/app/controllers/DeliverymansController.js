@@ -3,7 +3,7 @@
 /* eslint-disable no-shadow */
 /* eslint-disable class-methods-use-this */
 /**
- * @module DeliverymanController
+ * @module DeliverymansController
  */
 
 import { Op } from 'sequelize';
@@ -11,8 +11,8 @@ import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
 import Photos from '../models/Photos';
-/** DeliverymanController é responsável pelo controle de entregadores. */
-class DeliverymanController {
+/** DeliverymansController é responsável pelo controle de entregadores. */
+class DeliverymansController {
   /**
    * @method index
    * @param {*} req
@@ -54,9 +54,9 @@ class DeliverymanController {
    * @description Método responsável por listar um entregador por id.
    */
   async show(req, res) {
-    const { deliveryId } = req.params;
+    const { id } = req.params;
 
-    const delivery = await Deliverymans.findByPk(deliveryId, {
+    const delivery = await Deliverymans.findByPk(id, {
       attributes: ['id', 'name', 'email'],
       include: [
         {
@@ -122,7 +122,7 @@ class DeliverymanController {
    * @description Método responsável por atualizar entregadores.
    */
   async update(req, res) {
-    const { deliverymanId } = req.params;
+    const { id } = req.params;
 
     const schema = Yup.object().shape({
       name: Yup.string(),
@@ -146,7 +146,7 @@ class DeliverymanController {
       });
     }
 
-    const deliveryman = await Deliverymans.findByPk(deliverymanId);
+    const deliveryman = await Deliverymans.findByPk(id);
 
     if (isNullOrUndefined(deliveryman)) {
       res.status(400).json({ error: 'Deliveryman not found' });
@@ -170,9 +170,9 @@ class DeliverymanController {
    */
 
   async delete(req, res) {
-    const { deliverymanId } = req.params;
+    const { id } = req.params;
 
-    const deliveryman = await Deliverymans.findByPk(deliverymanId);
+    const deliveryman = await Deliverymans.findByPk(id);
 
     if (!deliveryman) {
       res.status(400).json({ error: 'Deliveryman not found' });
@@ -184,4 +184,4 @@ class DeliverymanController {
   }
 }
 
-export default new DeliverymanController();
+export default new DeliverymansController();
