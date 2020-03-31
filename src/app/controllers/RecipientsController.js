@@ -170,6 +170,7 @@ class RecipientsController {
       zip_code,
     } = await recipient.update(req.body);
 
+
     return res.status(200).json({
       name,
       street,

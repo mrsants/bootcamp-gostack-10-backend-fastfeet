@@ -283,6 +283,10 @@ class OrderManagementsController {
         });
       }
 
+      order.canceled_at = null;
+
+      await order.save();
+
       await order.update(req.body);
 
       return res.json(order);
@@ -300,9 +304,9 @@ class OrderManagementsController {
    */
   async delete(req, res) {
     const { id } = req.params;
-    const OrderManager = await OrderManagements.findByPk(id);
+    const order = await OrderManagements.findByPk(id);
 
-    if (isNullOrUndefined(OrderManager)) {
+    if (isNullOrUndefined(order)) {
       return res.status(400).json({
         error: {
           message: 'Order not exists',
@@ -310,11 +314,11 @@ class OrderManagementsController {
       });
     }
 
-    OrderManager.canceled_at = new Date();
+    order.canceled_at = new Date();
 
-    await OrderManager.save();
+    await order.save();
 
-    return res.status(200).json(OrderManager);
+    return res.status(200).json(order);
   }
 }
 
