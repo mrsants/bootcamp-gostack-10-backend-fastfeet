@@ -23,7 +23,7 @@ class OrderManagementsController {
   async index(req, res) {
     const { product, page = 1 } = req.query;
 
-    const deliverymans = await OrderManagements.findAll({
+    const orders = await OrderManagements.findAll({
       where: {
         product: {
           [Op.iLike]: `%${product}%`,
@@ -75,7 +75,19 @@ class OrderManagementsController {
       ],
     });
 
-    return res.json(deliverymans);
+    const listOrders = orders.filter(
+      (item) => !isNullOrUndefined(item.recipients),
+    );
+
+    if (listOrders.length <= 0) {
+      return res.status(401).json({
+        error: {
+          message: 'Orders not found',
+        },
+      });
+    }
+
+    return res.json(listOrders);
   }
 
   /**
@@ -134,7 +146,7 @@ class OrderManagementsController {
     });
 
     if (isNullOrUndefined(orderManagements)) {
-      return res.status(400).json({
+      return res.status(401).json({
         error: {
           message: 'Order not found',
         },
