@@ -14,19 +14,6 @@ module.exports = {
   },
   rules: {
     'class-methods-use-this': 'off',
-    camelcase: [
-      'error',
-      {
-        allow: [
-          'avatar_id',
-          'canceled_at',
-          'deliveryman_id',
-          'end_date',
-          'order_managements_id',
-          'signature_id',
-          'start_date',
-        ],
-      },
-    ],
+    camelcase: 'off'
   },
 };
