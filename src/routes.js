@@ -18,6 +18,8 @@ const upload = multer(multerConfig);
 
 routes.get('/deliverymans/:id/deliveries', ScheduleController.index);
 
+routes.get('/deliverymans/:id', DeliverymansController.show);
+
 routes.put(
   '/deliverymans/:idDeliveryman/deliveries/:idOrder',
   ScheduleController.update,
@@ -53,8 +55,6 @@ routes.delete('/recipients/:id', RecipientsController.delete);
 routes.post('/photos', upload.single('photos'), PhotosController.store);
 
 routes.get('/deliverymans', DeliverymansController.index);
-
-routes.get('/deliverymans/:id', DeliverymansController.show);
 
 routes.post('/deliverymans', DeliverymansController.store);
 
