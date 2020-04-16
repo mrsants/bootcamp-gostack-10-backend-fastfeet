@@ -28,13 +28,25 @@ class DeliverymansController {
       order: [['created_at']],
       limit: 20,
       offset: (page - 1) * 20,
-      attributes: ['id', 'name', 'email'],
+      attributes: ['id', 'name', 'email', 'start_date', 'end_date', 'canceled_at'],
       include: [
         {
           model: Photos,
           as: 'avatar',
           attributes: ['name', 'path', 'url'],
           required: true,
+        },
+        {
+          model: Recipients,
+          as: 'recipients',
+          attributes: [
+            'street',
+            'number',
+            'complement',
+            'state',
+            'city',
+            'zip_code',
+          ],
         },
       ],
     });
@@ -53,7 +65,7 @@ class DeliverymansController {
     const { id } = req.params;
 
     const delivery = await Deliverymans.findByPk(id, {
-      attributes: ['id', 'name', 'email'],
+      attributes: ['id', 'name', 'email', 'created_at', 'updated_at'],
       include: [
         {
           model: Photos,

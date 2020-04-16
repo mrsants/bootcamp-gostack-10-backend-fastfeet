@@ -7,7 +7,7 @@ import OrderManagementsController from './app/controllers/OrderManagementsContro
 import PhotosController from './app/controllers/PhotosController';
 import ProblemsController from './app/controllers/ProblemsController';
 import RecipientsController from './app/controllers/RecipientsController';
-import ScheduleController from './app/controllers/ScheduleController';
+import SchedulePendingController from './app/controllers/SchedulePendingController';
 import SessionController from './app/controllers/SessionController';
 import UserController from './app/controllers/UserController';
 import AuthenticationMiddleware from './app/middlewares/auth';
@@ -16,13 +16,13 @@ const routes = Router();
 
 const upload = multer(multerConfig);
 
-routes.get('/deliverymans/:id/deliveries', ScheduleController.index);
+routes.get('/deliverymans/:id/deliveries', SchedulePendingController.show);
 
 routes.get('/deliverymans/:id', DeliverymansController.show);
 
 routes.put(
   '/deliverymans/:idDeliveryman/deliveries/:idOrder',
-  ScheduleController.update,
+  SchedulePendingController.update,
 );
 
 routes.put(

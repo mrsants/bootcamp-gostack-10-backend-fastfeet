@@ -37,7 +37,6 @@ class OrderDeliveryController {
           as: 'recipients',
           attributes: [
             'street',
-            'district',
             'number',
             'complement',
             'state',

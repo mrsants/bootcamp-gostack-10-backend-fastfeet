@@ -8,7 +8,7 @@ import Deliverymans from '../models/Deliverymans';
 import OrderManagements from '../models/OrderManagements';
 import Recipients from '../models/Recipients';
 
-class ScheduleController {
+class SchedulePendingController {
   /**
    * @method show
    * @param {*} req
@@ -16,7 +16,7 @@ class ScheduleController {
    * @returns {Array}  list
    * @description Método responsável por listar as encomendas por entregador.
    */
-  async index(req, res) {
+  async show(req, res) {
     const { id } = req.params;
 
     const deliverymans = await Deliverymans.findByPk(id);
@@ -31,14 +31,18 @@ class ScheduleController {
         end_date: null,
         start_date: null,
       },
-      attributes: ['id', 'product', 'start_date', 'end_date'],
+      attributes: ['id', 'product', 
+        'start_date',
+        'end_date',
+        'canceled_at',
+        'cancelable',
+        'status',],
       include: [
         {
           model: Recipients,
           as: 'recipients',
           attributes: [
             'street',
-            'district',
             'number',
             'complement',
             'state',
@@ -138,4 +142,4 @@ class ScheduleController {
   }
 }
 
-export default new ScheduleController();
+export default new SchedulePendingController();
