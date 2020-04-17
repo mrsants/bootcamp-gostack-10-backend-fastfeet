@@ -31,12 +31,12 @@ class SchedulePendingController {
         end_date: null,
         start_date: null,
       },
-      attributes: ['id', 'product', 
+      attributes: ['id', 'product',
         'start_date',
         'end_date',
         'canceled_at',
         'cancelable',
-        'status',],
+        'status'],
       include: [
         {
           model: Recipients,
