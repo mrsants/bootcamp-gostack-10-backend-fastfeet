@@ -28,8 +28,6 @@ class SchedulePendingController {
     const deliveries = await OrderManagements.findAll({
       where: {
         deliveryman_id: id,
-        end_date: null,
-        start_date: null,
       },
       attributes: ['id', 'product',
         'start_date',
