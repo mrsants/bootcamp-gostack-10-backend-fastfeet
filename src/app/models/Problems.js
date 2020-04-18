@@ -20,6 +20,7 @@ class Problems extends Model {
       as: 'order_managements',
     });
   }
+
 }
 
 export default Problems;

@@ -67,9 +67,11 @@ class ProblemsController {
   async show(req, res) {
     const { id } = req.params;
 
-    const problem = await Problems.findOne({
-      where: { order_managements_id: id },
-      attributes: ['id', 'description'],
+    const problem = await Problems.findAll({
+      where: {
+        order_managements_id: id
+      },
+      attributes: ['id', 'description', 'created_at', 'updated_at'],
       include: [
         {
           model: OrderManagements,
@@ -107,13 +109,20 @@ class ProblemsController {
     }
 
     const { id } = req.params;
-    const delivery = await OrderManagements.findByPk(id);
+    const order = await OrderManagements.findByPk(id);
 
-    if (!delivery) {
+    if (!order) {
       return res.status(400).json({
         error: 'Delivery not found',
       });
     }
+
+    if (order.status !== 'PENDENTE') {
+      return res.status(400).json({
+        error: 'It is not possible to create a problem',
+      });
+    }
+
 
     const { description } = req.body;
 
