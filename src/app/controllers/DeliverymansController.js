@@ -7,6 +7,8 @@ import { isNullOrUndefined } from 'util';
 import * as Yup from 'yup';
 import Deliverymans from '../models/Deliverymans';
 import Photos from '../models/Photos';
+import Recipients from '../models/Recipients';
+
 /** DeliverymansController é responsável pelo controle de entregadores. */
 class DeliverymansController {
   /**
