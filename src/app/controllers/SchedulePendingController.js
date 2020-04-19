@@ -77,16 +77,7 @@ class SchedulePendingController {
     const orderManagements = await OrderManagements.findByPk(idOrder);
 
     if (isNullOrUndefined(orderManagements)) {
-      res.status(400).json({ error: 'Deliveryman not found' });
-    }
-
-    if (orderManagements.deliveryman_id !== Number(idOrder)) {
-      return res.status(401).json({
-        error: {
-          message: 'You can only edit deliveries that you own',
-          statusCode: 401,
-        },
-      });
+      res.status(400).json({ error: 'Order not found' });
     }
 
     if (orderManagements.start_date) {

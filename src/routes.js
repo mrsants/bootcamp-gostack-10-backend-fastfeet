@@ -21,7 +21,7 @@ routes.get('/deliverymans/:id/deliveries', SchedulePendingController.show);
 routes.get('/deliverymans/:id', DeliverymansController.show);
 
 routes.put(
-  '/deliverymans/:idDeliveryman/deliveries/:idOrder',
+  '/deliverymans/:idDeliveryman/deliveries/schedule/:idOrder',
   SchedulePendingController.update,
 );
 
