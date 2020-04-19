@@ -91,7 +91,13 @@ class OrderDeliveryController {
       return res.status(401).json({ error: 'Deliveryman not found' });
     }
 
-    const orderManagements = await OrderManagements.findByPk(idOrder);
+    const orderManagements = await OrderManagements.findOne({
+      where: {
+        id: idOrder,
+        start_date: { [Op.not]: null },
+        signature_id: null,
+      },
+    });
 
     if (isNullOrUndefined(orderManagements)) {
       return res.status(401).json({ error: 'Order delivery not found' });
