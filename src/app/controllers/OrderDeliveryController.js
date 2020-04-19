@@ -68,92 +68,45 @@ class OrderDeliveryController {
    * @returns {Object}  orders
    * @description Método responsável por criar as encomendas.
    */
-  async update(req, res) {
-    const { idDelivery, idOrder } = req.params;
-    const { signature_id } = req.body;
+   	async update(req, res) {
+		const { idOrder, idDelivery } = req.params;
 
-    const schema = Yup.object().shape({
-      signature_id: Yup.number().required(),
-    });
+		const deliveryman = await Deliverymans.findByPk(idDelivery);
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(401).json({
-        error: {
-          message: 'Signature is not required',
-          statusCode: 401,
-        },
-      });
-    }
+		if (!deliveryman) {
+			return res.status(400).json({ error: 'Delivery man does not exists' });
+		}
 
-    const deliverymans = await Deliverymans.findByPk(idDelivery);
 
-    if (isNullOrUndefined(deliverymans)) {
-      return res.status(401).json({ error: 'Deliveryman not found' });
-    }
+		const delivery = await OrderManagements.findOne({
+			where: {
+				id: idOrder,
+				start_date: { [Op.not]: null },
+				signature_id: null,
+			},
+		});
 
-    const orderManagements = await OrderManagements.findOne({
-      where: {
-        id: idOrder,
-        start_date: { [Op.not]: null },
-        signature_id: null,
-      },
-    });
+		if (!delivery) {
+			return res.status(400).json({ error: 'Delivery does not exists' });
+		}
 
-    if (isNullOrUndefined(orderManagements)) {
-      return res.status(401).json({ error: 'Order delivery not found' });
-    }
+		const { signature_id } = req.body;
 
-    if (orderManagements.deliveryman_id !== Number(idDelivery)) {
-      return res.status(401).json({
-        error: {
-          message: 'You can only edit deliveries that you own',
-          statusCode: 401,
-        },
-      });
-    }
+		const signatureImage = await Photos.findByPk(signature_id);
 
-    if (!orderManagements.start_date) {
-      return res.status(401).json({
-        error: {
-          message: 'You did not withdraw this delivery yet',
-          statusCode: 401,
-        },
-      });
-    }
+		if (!signatureImage) {
+			return res.status(400).json({ error: 'Signature image does not exists' });
+		}
 
-    if (orderManagements.end_date) {
-      return res.status(401).json({
-        error: {
-          message: 'You have already finished this delivery',
-          statusCode: 401,
-        },
-      });
-    }
+		await delivery.update({
+			end_date: new Date(),
+			signature_id,
+			status: 'ENTREGUE',
+		});
 
-    const now = new Date();
-
-    const hourStart = startOfHour(now);
-
-    const formattedDate = format(hourStart, "yyyy-MM-dd'T'HH:mm:ssxxx", {
-      locale: pt,
-    });
-
-    const {
-      id, product, start_date, end_date,
-    } = await OrderManagements.update(
-      {
-        end_date: formattedDate,
-        signature_id,
-      },
-    );
-
-    return res.status(200).json({
-      id,
-      product,
-      start_date,
-      end_date,
-    });
-  }
+		return res.json({});
+	}
 }
+
 
 export default new OrderDeliveryController();
