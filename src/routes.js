@@ -26,7 +26,7 @@ routes.put(
 );
 
 routes.put(
-  '/order-delivery/:idOrder/deliverymans/:idDelivery',
+  '/order-delivery/:idOrder/deliverymans/:idDelivery/confirmation',
   OrderDeliveryController.update,
 );
 
@@ -42,6 +42,8 @@ routes.get('/deliverymans/problems', ProblemsController.index);
 
 routes.get('/deliverymans/problems/:id', ProblemsController.show);
 
+routes.post('/photos', upload.single('photos'), PhotosController.store);
+
 routes.use(AuthenticationMiddleware);
 
 routes.put('/users', UserController.update);
@@ -55,8 +57,6 @@ routes.post('/recipients', RecipientsController.store);
 routes.put('/recipients/:id', RecipientsController.update);
 
 routes.delete('/recipients/:id', RecipientsController.delete);
-
-routes.post('/photos', upload.single('photos'), PhotosController.store);
 
 routes.get('/deliverymans', DeliverymansController.index);
 
