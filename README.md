@@ -3,7 +3,7 @@
 </h1>
 
 <h3 align="center">
-  Fastfeet Front-end
+  Fastfeet Backend
 </h3>
 
 <p align="center">Código do desáfio do Bootcamp GoStack 🎓</p>
